@@ -526,6 +526,23 @@ export const AITradingChat = () => {
                       {message.content}
                     </div>
 
+                    {message.txHash && (
+                      <a
+                        href={`https://chainscan-newton.0g.ai/tx/${message.txHash}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-block mt-3 px-3 py-1.5 rounded-lg bg-glass border border-glass hover:bg-glass text-xs text-white hover:text-white transition-all"
+                      >
+                        View Transaction on Explorer →
+                      </a>
+                    )}
+
+                    {message.commitmentHash && (
+                      <div className="mt-2 text-xs text-gray-light">
+                        Commitment: {message.commitmentHash.slice(0, 16)}...
+                      </div>
+                    )}
+
                     <div className="text-xs text-gray-light mt-2">
                       {new Date(message.timestamp).toLocaleTimeString()}
                     </div>

@@ -3,6 +3,7 @@ import { useContracts } from '../hooks/useContracts';
 import { ethers } from 'ethers';
 import { Button } from '@/components/ui/button';
 import { storageService } from '../services/storageService';
+import { x402Service } from '../services/x402Service';
 
 interface Chain {
   id: string;
@@ -189,7 +190,7 @@ export const IntentCrossChain = () => {
       const routeMessage: IntentMessage = {
         id: `route-${Date.now()}`,
         role: 'system',
-        content: `✅ Best Route Found!\n\n🎯 Solver: Tenma Bridge Protocol\n💰 Estimated Output: ${(parseFloat(intent.amount) * 0.998).toFixed(4)} ${intent.toToken}\n⚡ Fee: 0.2%\n⏱️ Estimated Time: 5-10 minutes\n\n🔒 Executing with MEV protection...`,
+        content: `Best Route Found!\n\nSolver: x402 Cross-Chain Protocol\nEstimated Output: ${(parseFloat(intent.amount) * 0.998).toFixed(4)} ${intent.toToken}\nFee: 0.2%\nEstimated Time: 5-10 minutes\n\nExecuting with MEV protection via x402...`,
         timestamp: Date.now(),
       };
       setMessages(prev => [...prev, routeMessage]);
@@ -212,10 +213,33 @@ export const IntentCrossChain = () => {
 
       console.log('Transaction committed:', commitment);
 
+      // Use x402 for cross-chain messaging
+      const x402Message: IntentMessage = {
+        id: `x402-${Date.now()}`,
+        role: 'system',
+        content: `x402 Cross-Chain Message Initiated\n\nMessage ID: Relaying to ${intent.toChain}\nProtocol: x402 v1.0\nStatus: Pending relay\n\nYour transaction is being bridged via x402 protocol...`,
+        timestamp: Date.now(),
+      };
+      setMessages(prev => [...prev, x402Message]);
+
+      // Execute cross-chain transaction via x402
+      const x402Result = await x402Service.executeCrossChainTx(
+        intent.fromChain.toLowerCase().replace(' ', ''),
+        intent.toChain.toLowerCase().replace(' ', ''),
+        {
+          from: account || '',
+          to: recipient,
+          amount: intent.amount,
+          token: intent.fromToken,
+        }
+      );
+
+      console.log('x402 result:', x402Result);
+
       const commitMessage: IntentMessage = {
         id: `commit-${Date.now()}`,
         role: 'system',
-        content: `✅ Transaction Committed!\n\n📝 Commitment Hash: ${commitment.commitmentHash.slice(0, 10)}...${commitment.commitmentHash.slice(-8)}\n\n⏰ MEV Protection: Active (30s delay)\n\n🔗 View on Explorer: https://chainscan-newton.0g.ai/tx/${commitment.tx.hash}`,
+        content: `Transaction Committed!\n\nCommitment Hash: ${commitment.commitmentHash.slice(0, 10)}...${commitment.commitmentHash.slice(-8)}\nx402 Message ID: ${x402Result.messageId}\n\nMEV Protection: Active (30s delay)\n\nView on Explorer: https://chainscan-newton.0g.ai/tx/${commitment.tx.hash}`,
         timestamp: Date.now(),
         txHash: commitment.tx.hash,
       };
@@ -236,7 +260,7 @@ export const IntentCrossChain = () => {
         const successMessage: IntentMessage = {
           id: `success-${Date.now()}`,
           role: 'agent',
-          content: `🎉 Swap Intent Executed Successfully!\n\n✅ Your ${intent.amount} ${intent.fromToken} has been bridged to ${intent.toChain}\n\n📍 Destination: You'll receive ~${(parseFloat(intent.amount) * 0.998).toFixed(4)} ${intent.toToken}\n\n⏱️ Funds will arrive in 5-10 minutes\n\n🔗 Track on Explorer: https://chainscan-newton.0g.ai/tx/${commitment.tx.hash}\n\n💾 Intent stored on 0G Storage for tracking`,
+          content: `Swap Intent Executed Successfully!\n\nYour ${intent.amount} ${intent.fromToken} has been bridged to ${intent.toChain}\n\nDestination: You'll receive ~${(parseFloat(intent.amount) * 0.998).toFixed(4)} ${intent.toToken}\n\nFunds will arrive in 5-10 minutes\n\nSource TX: https://chainscan-newton.0g.ai/tx/${commitment.tx.hash}\nx402 Message: ${x402Result.messageId}\n\nIntent stored on 0G Storage for tracking`,
           timestamp: Date.now(),
           txHash: commitment.tx.hash,
         };
@@ -636,27 +660,31 @@ export const IntentCrossChain = () => {
             </h3>
             <div className="space-y-3 text-xs text-gray">
               <div className="flex items-start gap-2">
-                <span className="text-white">✅</span>
+                <span className="text-white">✓</span>
                 <span>Natural language intent parsing</span>
               </div>
               <div className="flex items-start gap-2">
-                <span className="text-white">✅</span>
+                <span className="text-white">✓</span>
                 <span>Real wallet integration</span>
               </div>
               <div className="flex items-start gap-2">
-                <span className="text-white">✅</span>
+                <span className="text-white">✓</span>
                 <span>MEV protection (commit-reveal)</span>
               </div>
               <div className="flex items-start gap-2">
-                <span className="text-white">✅</span>
+                <span className="text-white">✓</span>
+                <span>x402 cross-chain protocol</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <span className="text-white">✓</span>
                 <span>0G Storage for intent tracking</span>
               </div>
               <div className="flex items-start gap-2">
-                <span className="text-white">✅</span>
+                <span className="text-white">✓</span>
                 <span>Real transactions on testnet</span>
               </div>
               <div className="flex items-start gap-2">
-                <span className="text-white">✅</span>
+                <span className="text-white">✓</span>
                 <span>Explorer links for verification</span>
               </div>
             </div>

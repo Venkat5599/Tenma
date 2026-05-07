@@ -197,15 +197,20 @@ export const IntentCrossChain = () => {
       // Execute transaction on source chain (0G Network)
       const recipient = '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb'; // Bridge contract
       
-      // Simulate transaction
+      // Simulate transaction first
+      console.log('Simulating transaction...');
       const simulation = await simulateTransaction(recipient, intent.amount);
       
       if (!simulation.allowed) {
         throw new Error(`Firewall blocked: ${simulation.reason}`);
       }
 
+      console.log('Simulation passed, committing transaction...');
+      
       // Commit transaction
       const commitment = await commitTransaction(recipient, intent.amount);
+
+      console.log('Transaction committed:', commitment);
 
       const commitMessage: IntentMessage = {
         id: `commit-${Date.now()}`,
@@ -243,10 +248,22 @@ export const IntentCrossChain = () => {
       
       setCurrentIntent({ ...intent, status: 'failed' });
       
+      // Better error message
+      let errorMsg = error.message || 'Unknown error';
+      
+      // Check for specific errors
+      if (errorMsg.includes('ENS') || errorMsg.includes('UNSUPPORTED_OPERATION')) {
+        errorMsg = 'Network configuration error. Please make sure you are connected to 0G Newton Testnet.';
+      } else if (errorMsg.includes('user rejected')) {
+        errorMsg = 'Transaction rejected by user.';
+      } else if (errorMsg.includes('insufficient funds')) {
+        errorMsg = 'Insufficient funds in wallet.';
+      }
+      
       const errorMessage: IntentMessage = {
         id: `error-${Date.now()}`,
         role: 'system',
-        content: `❌ Swap Failed\n\n${error.message}\n\nYour funds are safe. No transaction was executed.`,
+        content: `❌ Swap Failed\n\n${errorMsg}\n\nYour funds are safe. No transaction was executed.`,
         timestamp: Date.now(),
       };
       setMessages(prev => [...prev, errorMessage]);

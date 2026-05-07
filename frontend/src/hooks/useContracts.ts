@@ -210,9 +210,12 @@ export const useContracts = () => {
   const commitTransaction = async (target: string, value: string, data: string = '0x') => {
     try {
       if (!firewallContract) throw new Error('Contract not initialized');
+      if (!signer) throw new Error('Signer not available');
 
-      // Generate secret
-      const secret = ethers.randomBytes(32);
+      // Generate secret using crypto.getRandomValues (browser-safe)
+      const secretArray = new Uint8Array(32);
+      crypto.getRandomValues(secretArray);
+      const secret = secretArray;
       const secretHex = ethers.hexlify(secret);
 
       // Create commitment hash

@@ -7,12 +7,12 @@ export const Header = () => {
 
   const navItems = [
     { path: '/', label: 'Dashboard' },
-    { path: '/privacy', label: 'Privacy' },
-    { path: '/mev-analytics', label: 'MEV Analytics' },
-    { path: '/cross-chain', label: 'Intent Cross-Chain' },
     { path: '/ai-chat', label: 'AI Chat' },
+    { path: '/cross-chain', label: 'Intent Cross-Chain' },
     { path: '/live-demo', label: 'Live Demo' },
     { path: '/policies', label: 'Policies' },
+    { path: '/privacy', label: 'Privacy' },
+    { path: '/mev-analytics', label: 'MEV Analytics' },
   ]
 
   const isActive = (path: string) => {

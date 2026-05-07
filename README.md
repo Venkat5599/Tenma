@@ -1,49 +1,75 @@
-# Tenma - Privacy & Sovereignty Layer for Autonomous AI Agents
+<p align="center"><img src="https://img.shields.io/badge/🛡️-Tenma_Firewall-00D4FF?style=for-the-badge&labelColor=0a0f12" alt="Tenma Firewall" /></p>
 
-**Privacy-Preserving Sovereign Infrastructure for Web 4.0 on 0G Network**
+<h1 align="center">Tenma (天魔) Firewall</h1>
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Solidity](https://img.shields.io/badge/Solidity-0.8.24-blue)](https://soliditylang.org/)
-[![0G Network](https://img.shields.io/badge/0G-Newton%20Testnet-green)](https://0g.ai/)
-[![Track 5](https://img.shields.io/badge/Track-Privacy%20%26%20Sovereign%20Infrastructure-purple)](https://0g.ai/)
+<p align="center"><strong>On-Chain Security Layer for Autonomous AI Agent Transactions on 0G Network</strong></p>
 
----
-
-## 🎯 What is Tenma?
-
-**Tenma** (天魔 - Heavenly Demon) is an **on-chain firewall** that protects autonomous AI agents from making unauthorized transactions. It provides privacy-preserving sovereign infrastructure with MEV protection, policy enforcement, and user-controlled security - all enforced at the blockchain level.
-
-### The Problem
-
-- AI agents can make payments autonomously
-- If hacked or compromised, they could drain all funds
-- Traditional security can be bypassed
-- No privacy protection from MEV bots
-
-### The Solution
-
-Tenma enforces security policies **at the smart contract level** - meaning the blockchain itself blocks unauthorized transactions. Even if your AI agent is compromised, it **cannot** violate your policies.
-
-```
-WITHOUT Tenma:
-AI Agent → Blockchain
-❌ If AI is hacked → All funds drained
-
-WITH Tenma:
-AI Agent → Tenma Firewall → Policy Check → Blockchain
-✅ If AI is hacked → Firewall blocks unauthorized transactions
-```
+<p align="center">
+<a href="https://chainscan-newton.0g.ai/address/0x05Ef28B338B1521837Ccb8B4fDb74b2075D7D7F9"><img src="https://img.shields.io/badge/🔴_LIVE-0G_Newton_Testnet-00D4FF?style=for-the-badge" alt="Live on 0G" /></a>
+<a href="https://chainscan-newton.0g.ai/address/0x05Ef28B338B1521837Ccb8B4fDb74b2075D7D7F9"><img src="https://img.shields.io/badge/✅_VERIFIED-Smart_Contracts-00FF88?style=for-the-badge" alt="Verified" /></a>
+<img src="https://img.shields.io/badge/Solidity-0.8.19-363636?style=for-the-badge&logo=solidity" alt="Solidity" />
+</p>
 
 ---
 
-## 🚀 Live Deployment
+## 📋 Project Overview
 
-### Smart Contracts on 0G Newton Testnet
+**Tenma (天魔 - Heavenly Demon) Firewall** is a smart contract security layer that protects autonomous AI agent transactions on the 0G blockchain. It enforces spending policies directly on-chain, ensuring that even if an AI agent's private key is compromised, attackers cannot drain funds beyond configured limits.
 
-| Contract | Address | Status |
-|----------|---------|--------|
-| **CommitRevealContract** | `0xD98359F3E80d11703267ff75f03bA4E1B4f7B58d` | ✅ Deployed & Verified |
-| **TenmaFirewall** | `0x05Ef28B338B1521837Ccb8B4fDb74b2075D7D7F9` | ✅ Deployed & Verified |
+### What It Does
+
+- **Enforces spending limits** - Max per transaction, daily caps
+- **Blocks unauthorized recipients** - Whitelist/blacklist support
+- **Prevents MEV attacks** - 5-minute commit-reveal mechanism
+- **Provides emergency controls** - Instant pause capability
+- **Creates audit trail** - All attempts logged on-chain
+- **Protects AI agents** - Blockchain-enforced security policies
+
+### Key Innovation
+
+Unlike off-chain security (which can be bypassed), our firewall is **enforced at the smart contract level**. The blockchain itself prevents unauthorized transfers - no trust assumptions, no external dependencies.
+
+```
+Traditional Security:  Agent → Wallet → Blockchain (no protection)
+
+With Tenma Firewall:   Agent → Firewall → Policy Check → MEV Protection → Blockchain (protected)
+```
+
+---
+
+## 🌐 Why This Matters for 0G Network
+
+### The AI Agent Opportunity
+
+The future of blockchain is autonomous AI agents managing funds. 0G Network is positioning itself as a leader in this space with high-performance infrastructure. But **autonomous transactions without security = liability**.
+
+### What We Bring to 0G
+
+| Benefit | Impact |
+|---------|--------|
+| **Enables Enterprise Adoption** | Companies won't deploy AI agents with unlimited spending power. Our firewall makes it safe. |
+| **Reduces Risk** | Limits damage from compromised agents, prompt injection attacks, and bugs |
+| **Increases Trust** | Users can authorize AI payments knowing there are guardrails |
+| **MEV Protection** | Commit-reveal mechanism prevents front-running and sandwich attacks |
+| **Native Integration** | Built specifically for 0G Network, optimized for A0GI transactions |
+
+### Market Need
+
+- AI agents managing treasury funds need spending limits
+- DAOs automating payments need recipient controls
+- DeFi protocols need MEV protection
+- **All of these need on-chain enforcement that can't be bypassed**
+
+---
+
+## 🚀 Deployment Information
+
+### Live Contracts on 0G Newton Testnet
+
+| Contract | Address | Verified |
+|----------|---------|----------|
+| **TenmaFirewall** | `0x05Ef28B338B1521837Ccb8B4fDb74b2075D7D7F9` | [✅ View Code](https://chainscan-newton.0g.ai/address/0x05Ef28B338B1521837Ccb8B4fDb74b2075D7D7F9) |
+| **CommitRevealContract** | `0xD98359F3E80d11703267ff75f03bA4E1B4f7B58d` | [✅ View Code](https://chainscan-newton.0g.ai/address/0xD98359F3E80d11703267ff75f03bA4E1B4f7B58d) |
 
 ### Network Details
 
@@ -52,406 +78,457 @@ Network:     0G Newton Testnet
 Chain ID:    16602
 RPC URL:     https://evmrpc-testnet.0g.ai
 Explorer:    https://chainscan-newton.0g.ai
-Currency:    A0GI (test 0G)
+Currency:    A0GI (test tokens)
 ```
 
----
-
-## ✨ Key Features
-
-### 🔐 1. Privacy-Preserving Protocols
-
-- **Commit-Reveal Mechanism**: Transaction details hidden until reveal
-- **End-to-End Encryption**: AES-256-GCM for all transactions
-- **MEV Protection**: 5-minute delay prevents front-running
-- **Zero-Knowledge**: No transaction visibility during commit phase
-
-### 👑 2. Sovereign Infrastructure
-
-- **User-Defined Policies**: You set the rules
-- **On-Chain Enforcement**: Blockchain enforces policies (cannot be bypassed)
-- **Trustless Execution**: No central authority
-- **Immutable Rules**: Policies cannot be changed without your consent
-
-### 🛡️ 3. MEV-Resistant Architecture
-
-- **Time-Delayed Execution**: 5-minute mandatory delay
-- **Encrypted Mempool**: Transaction details hidden from MEV bots
-- **Sandwich Attack Prevention**: Protected from value extraction
-- **Front-Running Protection**: Bots cannot see transactions in advance
-
-### 🌐 4. Cross-Chain Abstraction
-
-- **Unified Interface**: Single SDK for multiple chains
-- **Consistent Policies**: Same rules across all chains
-- **Seamless Bridging**: Cross-chain asset transfers
-- **Aggregated Liquidity**: Access liquidity everywhere
-
----
-
-## 🎬 Quick Start
-
-### 1. Clone Repository
+### Deploy Your Own
 
 ```bash
-git clone https://github.com/yourusername/tenma-firewall.git
-cd tenma-firewall
-```
+# 1. Clone the repository
+git clone https://github.com/Venkat5599/Tenma.git
+cd Tenma
 
-### 2. Install Dependencies
-
-```bash
-# Install contract dependencies
+# 2. Install dependencies
 cd contracts
 npm install
 
-# Install frontend dependencies
-cd ../frontend
-npm install
+# 3. Configure environment
+cp .env.example .env
+# Edit .env with your private key
 
-# Install SDK dependencies
-cd ../sdk
-npm install
+# 4. Deploy to 0G Newton Testnet
+npx hardhat run scripts/deploy-tenma-firewall-full.ts --network 0g-testnet
+
+# 5. Verify contracts (optional)
+npx hardhat verify --network 0g-testnet <CONTRACT_ADDRESS>
 ```
 
-### 3. Set Up Environment
+---
 
-```bash
-# In contracts folder
-cp .env.example .env
-# Edit .env with your PRIVATE_KEY
+## 📖 How to Use the Contracts
 
-# In frontend folder
-cp .env.example .env
-# Edit .env with contract addresses
+### Option 1: Direct Contract Interaction
+
+#### Execute a Protected Transaction
+
+```solidity
+// Solidity - Call from your contract
+interface ITenmaFirewall {
+    function commit(bytes32 commitmentHash) external;
+    function reveal(address target, uint256 value, bytes data, bytes32 secret) external payable;
+}
+
+ITenmaFirewall firewall = ITenmaFirewall(0x05Ef28B338B1521837Ccb8B4fDb74b2075D7D7F9);
+
+// Step 1: Commit (hide transaction details)
+bytes32 secret = keccak256(abi.encodePacked(block.timestamp));
+bytes32 commitmentHash = keccak256(abi.encodePacked(target, value, data, secret));
+firewall.commit(commitmentHash);
+
+// Step 2: Wait 5 minutes (MEV protection)
+
+// Step 3: Reveal and execute
+firewall.reveal{value: value}(target, value, data, secret);
+// If policy violated → transaction REVERTS
+// If policy passes → payment executes
 ```
 
-### 4. Run Frontend
+#### Check If Transaction Would Succeed
+
+```solidity
+// Simulate before executing
+(bool allowed, string memory reason) = firewall.simulateTransaction(
+    senderAddress,
+    recipientAddress,
+    amount
+);
+
+// allowed = true/false
+// reason = "Transaction allowed" or "Exceeds max transaction amount"
+```
+
+### Option 2: JavaScript/TypeScript Integration
+
+```typescript
+import { ethers } from 'ethers';
+
+// Connect to firewall
+const FIREWALL_ADDRESS = '0x05Ef28B338B1521837Ccb8B4fDb74b2075D7D7F9';
+const FIREWALL_ABI = [
+  'function commit(bytes32 commitmentHash) external',
+  'function reveal(address target, uint256 value, bytes data, bytes32 secret) external payable',
+  'function simulateTransaction(address sender, address target, uint256 value) view returns (bool allowed, string reason)',
+];
+
+const provider = new ethers.JsonRpcProvider('https://evmrpc-testnet.0g.ai');
+const signer = new ethers.Wallet(privateKey, provider);
+const firewall = new ethers.Contract(FIREWALL_ADDRESS, FIREWALL_ABI, signer);
+
+// Simulate first
+const [allowed, reason] = await firewall.simulateTransaction(
+  await signer.getAddress(),
+  '0xRecipientAddress',
+  ethers.parseEther('1.0')
+);
+
+console.log(allowed ? 'Will succeed' : `Will fail: ${reason}`);
+
+// Step 1: Commit
+const target = '0xRecipientAddress';
+const value = ethers.parseEther('1.0');
+const data = '0x';
+const secret = ethers.randomBytes(32);
+
+const payload = ethers.AbiCoder.defaultAbiCoder().encode(
+  ['address', 'uint256', 'bytes'],
+  [target, value, data]
+);
+const commitmentHash = ethers.keccak256(ethers.concat([payload, secret]));
+
+const tx1 = await firewall.commit(commitmentHash);
+await tx1.wait();
+console.log('Committed:', commitmentHash);
+
+// Step 2: Wait 5 minutes
+await new Promise(resolve => setTimeout(resolve, 5 * 60 * 1000));
+
+// Step 3: Reveal and execute
+const tx2 = await firewall.reveal(target, value, data, secret, { value });
+await tx2.wait();
+console.log('Transaction executed:', tx2.hash);
+```
+
+### Option 3: Using the Frontend Dashboard
 
 ```bash
-cd frontend
+# 1. Clone and install
+git clone https://github.com/Venkat5599/Tenma.git
+cd Tenma/frontend
+npm install
+
+# 2. Start development server
 npm run dev
+
+# 3. Open http://localhost:5174
+
+# 4. Connect MetaMask to 0G Newton Testnet
+#    - Network: 0G Newton Testnet
+#    - RPC: https://evmrpc-testnet.0g.ai
+#    - Chain ID: 16602
+
+# 5. Configure your policies in the Policy Config page
+
+# 6. Try the Live Demo to see real-time blocking!
 ```
 
-Open http://localhost:5175
+### Contract Functions Reference
+
+| Function | Description | Access |
+|----------|-------------|--------|
+| `commit(commitmentHash)` | Commit transaction (step 1) | Anyone |
+| `reveal(target, value, data, secret)` | Reveal and execute (step 2) | Committer |
+| `simulateTransaction(sender, target, value)` | Check if transaction would succeed | View |
+| `setPolicy(...)` | Configure security policies | Owner |
+| `addToWhitelist(target)` | Add address to whitelist | Owner |
+| `removeFromWhitelist(target)` | Remove from whitelist | Owner |
+| `pause()` / `unpause()` | Emergency controls | Owner |
 
 ---
 
-## 📖 Documentation
+## 🛡️ Security Policies
 
-- **[Architecture](./docs/ARCHITECTURE.md)** - System design and components
-- **[Deployment Guide](./docs/DEPLOYMENT.md)** - How to deploy contracts and frontend
-- **[SDK Documentation](./docs/SDK.md)** - Complete API reference
+All policies are enforced on-chain. Violations cause transaction revert.
+
+| Policy | Default Value | Configurable |
+|--------|---------------|--------------|
+| Max per transaction | 10.0 A0GI | ✅ Yes |
+| Daily spending limit | 50.0 A0GI | ✅ Yes |
+| Max gas price | 100 Gwei | ✅ Yes |
+| Max risk score | 5/10 | ✅ Yes |
+| Whitelist enforcement | Optional | ✅ Yes |
+| Time restrictions | Optional | ✅ Yes |
+| Emergency pause | Off | ✅ Yes |
+| MEV protection delay | 5 minutes | ❌ Fixed |
+
+### Policy Violation Examples
+
+```
+Attempt: Send 15.0 A0GI (limit is 10.0)
+Result:  REVERT("Exceeds max transaction amount")
+
+Attempt: Send to non-whitelisted address
+Result:  REVERT("Recipient not whitelisted")
+
+Attempt: Exceed daily limit
+Result:  REVERT("Daily limit exceeded")
+
+Attempt: Reveal before 5 minutes
+Result:  REVERT("Commitment not ready")
+```
 
 ---
 
-## 🏗️ Project Structure
+## 🏗️ Architecture
 
 ```
-tenma-firewall/
-├── contracts/              # Smart contracts
+┌─────────────────────────────────────────────────────────────────────────┐
+│                              USER/AI AGENT                               │
+│                    (AI Agent, DApp, or Direct Call)                     │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                          TenmaFirewall                                   │
+│                   0x05Ef28B338B1521837Ccb8B4fDb74b2075D7D7F9            │
+│                                                                          │
+│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐         │
+│  │ Policy Engine   │  │ Commit-Reveal   │  │ Emergency Pause │         │
+│  │ setPolicy()     │  │ commit/reveal() │  │ pause/unpause() │         │
+│  └────────┬────────┘  └────────┬────────┘  └─────────────────┘         │
+│           │                    │                                         │
+│           └────────────────────┴──────────────────┐                     │
+│                                                   ▼                     │
+│                                    ┌─────────────────────────┐          │
+│                                    │    Policy Check         │          │
+│                                    │    (MUST PASS)          │          │
+│                                    └───────────┬─────────────┘          │
+└────────────────────────────────────────────────┼────────────────────────┘
+                                                 │
+                                                 ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                      CommitRevealContract                                │
+│                   0xD98359F3E80d11703267ff75f03bA4E1B4f7B58d            │
+│                                                                          │
+│  Checks:                                                                 │
+│  ├── Commitment exists?                                                 │
+│  ├── 5 minutes passed?                                                  │
+│  ├── Not expired (24 hours)?                                            │
+│  ├── Secret matches?                                                    │
+│  └── Not already revealed?                                              │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    │
+                    ┌───────────────┴───────────────┐
+                    │                               │
+                    ▼                               ▼
+            ┌─────────────┐                 ┌─────────────┐
+            │  ✅ ALLOWED  │                 │  ❌ BLOCKED  │
+            │   Transfer   │                 │   REVERT    │
+            │   Executes   │                 │   No funds  │
+            └─────────────┘                 │   move      │
+                                            └─────────────┘
+```
+
+---
+
+## 📁 Project Structure
+
+```
+Tenma/
+├── contracts/          # Solidity smart contracts
 │   ├── contracts/
-│   │   ├── CommitRevealContract.sol
-│   │   └── TenmaFirewall.sol
-│   ├── scripts/
-│   │   └── deploy-tenma-firewall-full.ts
-│   └── test/
+│   │   ├── TenmaFirewall.sol
+│   │   └── CommitRevealContract.sol
+│   ├── scripts/        # Deployment scripts
+│   ├── test/           # Contract tests
+│   └── hardhat.config.ts
 │
-├── frontend/               # React UI
+├── frontend/           # React dashboard
 │   ├── src/
+│   │   ├── components/
+│   │   ├── hooks/
 │   │   ├── pages/
-│   │   │   ├── Dashboard.tsx
-│   │   │   ├── PrivacyDashboard.tsx
-│   │   │   ├── MEVAnalytics.tsx
-│   │   │   ├── CrossChainBridge.tsx
-│   │   │   ├── AITradingChat.tsx
-│   │   │   └── LiveDemo.tsx
-│   │   └── components/
+│   │   └── ...
 │   └── package.json
 │
-├── sdk/                    # Developer SDK
+├── sdk/                # TypeScript SDK
 │   ├── src/
 │   │   ├── TenmaFirewall.ts
 │   │   ├── TenmaAgent.ts
-│   │   └── types.ts
-│   └── examples/
+│   │   └── ...
+│   └── package.json
 │
-└── docs/                   # Documentation
-    ├── ARCHITECTURE.md
-    ├── DEPLOYMENT.md
-    └── SDK.md
+├── agent/              # AI agent implementation
+├── storage/            # 0G Storage integration
+└── docs/               # Documentation
 ```
 
 ---
 
-## 💡 How It Works
+## 📚 Documentation
 
-### Commit-Reveal Flow
-
-```
-1. COMMIT PHASE
-   User → Encrypt transaction → Submit commitment hash
-   ↓
-   Blockchain stores hash (details hidden)
-   ↓
-   MEV bots cannot see transaction
-
-2. WAIT PERIOD (5 minutes)
-   ↓
-   MEV opportunity window passes
-
-3. REVEAL PHASE
-   User → Submit transaction details + secret
-   ↓
-   Firewall validates commitment hash
-   ↓
-   Policy check (amount, whitelist, risk score)
-   ↓
-   Execute if policies pass
-
-4. EXECUTION
-   Transaction executed on blockchain
-   ✅ Protected from MEV
-   ✅ Policy enforced
-```
-
-### Policy Enforcement
-
-```typescript
-// Set policies
-await firewall.setPolicy({
-  maxTransactionAmount: '10.0',      // Max 10 ETH per transaction
-  maxDailyAmount: '50.0',            // Max 50 ETH per day
-  whitelistedContracts: [            // Only these contracts allowed
-    '0xUniswapRouter...',
-  ],
-  maxRiskScore: 50,                  // Max risk score 50/100
-});
-
-// Try to send 100 ETH
-await firewall.executeTransaction({
-  to: '0xRecipient...',
-  value: '100.0',                    // Exceeds limit!
-  data: '0x',
-});
-
-// Result: ❌ BLOCKED - Amount exceeds limit
-```
+- [Architecture](./docs/ARCHITECTURE.md) - Technical deep-dive
+- [Deployment Guide](./docs/DEPLOYMENT.md) - How to deploy
+- [SDK Documentation](./docs/SDK.md) - Complete SDK reference
+- [Implementation Status](./docs/IMPLEMENTATION-STATUS.md) - What's real vs demo
 
 ---
 
-## 🎯 Use Cases
+## 🖥️ Frontend Features
 
-### 1. AI Trading Bots
-- Set spending limits
-- Whitelist DEX contracts
-- Prevent unauthorized trades
-- MEV protection for trades
+### Dashboard
+- Real wallet connection with MetaMask
+- Real-time policy data from blockchain
+- Live transaction statistics
+- Quick actions to all features
 
-### 2. DAO Treasury Management
-- Enforce spending policies
-- Multi-sig with AI agents
-- Automated payments with limits
-- Audit trail on-chain
+### Privacy Dashboard
+- Privacy score calculation
+- MEV risk assessment
+- Transaction history from blockchain
+- Clickable transactions with details
+- Privacy settings panel
 
-### 3. Subscription Services
-- Recurring payment limits
-- Time-based restrictions
-- Automatic renewals with caps
-- User sovereignty
+### MEV Analytics
+- Real-time attack prevention stats
+- Time range filters (24h, 7d, 30d, all)
+- Attack type filters
+- Export data as JSON
+- Live attack feed
 
-### 4. DeFi Automation
-- Yield farming with limits
-- Automated rebalancing
-- Risk-controlled strategies
-- MEV-protected swaps
+### Policy Configuration
+- Load policies from blockchain
+- Save policies to smart contract
+- Add contracts to on-chain whitelist
+- Real-time validation
+- Blockchain-enforced rules
 
----
+### AI Trading Chat
+- Interactive AI agent demo
+- Real-time firewall blocking
+- Suspicious command detection
+- Multiple trading strategies
 
-## 🏆 Built for 0G Network Hackathon 2025
+### Intent Cross-Chain
+- Intent-based execution
+- Solver competition
+- Gas abstraction
+- Unified policies across chains
 
-### Track: Privacy & Sovereign Infrastructure
-
-**Why Tenma Perfectly Aligns**:
-
-#### 1. Privacy-Preserving Protocols ✅
-- Commit-reveal mechanism (zero-knowledge)
-- End-to-end encryption (AES-256-GCM)
-- Encrypted storage on 0G Network
-- Privacy-preserving analytics
-
-#### 2. Sovereign Infrastructure ✅
-- User-controlled policies
-- On-chain enforcement (trustless)
-- No central authority
-- Immutable rules
-
-#### 3. MEV-Resistant Infrastructure ✅
-- Time-delayed execution
-- Encrypted mempool
-- Front-running prevention
-- $1.4B MEV problem solved
-
-#### 4. Cross-Chain Solutions ✅
-- Unified interface
-- Multi-chain support
-- Consistent policies
-- Seamless bridging
-
-#### 5. Confidentiality Rails for Web 4.0 ✅
-- Privacy by default
-- User sovereignty
-- Trustless execution
-- Decentralized infrastructure
-
----
-
-## 🛠️ Tech Stack
-
-### Smart Contracts
-- Solidity 0.8.24
-- Hardhat
-- OpenZeppelin Contracts
-- ethers.js v6
-
-### Frontend
-- React 18
-- TypeScript
-- Vite
-- TailwindCSS
-- ethers.js v6
-
-### SDK
-- TypeScript
-- ethers.js v6
-- Grok API
-- 0G Storage SDK
-- Zod validation
-
----
-
-## 📊 Features Comparison
-
-| Feature | Traditional Security | Tenma |
-|---------|---------------------|-------|
-| **Enforcement** | Off-chain (bypassable) | On-chain (guaranteed) ✅ |
-| **AI Integration** | Manual | Autonomous ✅ |
-| **Real-Time Blocking** | No | Yes ✅ |
-| **MEV Protection** | No | Yes (commit-reveal) ✅ |
-| **Privacy** | No | End-to-end encryption ✅ |
-| **User Sovereignty** | No | Complete control ✅ |
-| **Cross-Chain** | No | Unified interface ✅ |
+### Live Demo
+- Watch AI agent make decisions
+- See real-time firewall blocking
+- Policy violation detection
+- Interactive controls
 
 ---
 
 ## 🧪 Testing
 
-### Run Smart Contract Tests
-
 ```bash
+# Run contract tests
 cd contracts
-npm test
-```
+npx hardhat test
 
-### Run Frontend
+# Run the full demo flow
+npx hardhat run scripts/demo-firewall-flow.ts --network 0g-testnet
 
-```bash
-cd frontend
-npm run dev
-```
-
-### Test SDK
-
-```bash
-cd sdk
-npx ts-node examples/basic-firewall.ts
+# Expected output:
+# ✅ Policy set successfully
+# ✅ Commitment created
+# ⏳ Waiting 5 minutes...
+# ✅ Transaction revealed and executed
+# ❌ Policy violation blocked (expected)
 ```
 
 ---
 
-## 📝 Examples
+## 🔗 Links
 
-### Basic Usage
+| Resource | URL |
+|----------|-----|
+| **GitHub Repository** | [github.com/Venkat5599/Tenma](https://github.com/Venkat5599/Tenma) |
+| **TenmaFirewall Contract** | [View on Explorer](https://chainscan-newton.0g.ai/address/0x05Ef28B338B1521837Ccb8B4fDb74b2075D7D7F9) |
+| **CommitReveal Contract** | [View on Explorer](https://chainscan-newton.0g.ai/address/0xD98359F3E80d11703267ff75f03bA4E1B4f7B58d) |
+| **0G Network** | [0g.ai](https://0g.ai) |
+| **0G Faucet** | [Get Test A0GI](https://faucet.0g.ai) |
 
-```typescript
-import { TenmaFirewall } from '@tenma/firewall-sdk';
+---
 
-const firewall = new TenmaFirewall({
-  contractAddress: '0x05Ef28B338B1521837Ccb8B4fDb74b2075D7D7F9',
-  rpcUrl: 'https://evmrpc-testnet.0g.ai',
-  privateKey: process.env.PRIVATE_KEY!,
-});
+## 🛠️ Tech Stack
 
-await firewall.initialize();
+- **Smart Contracts:** Solidity 0.8.19
+- **Development:** Hardhat, TypeScript
+- **Frontend:** React, Vite, TailwindCSS
+- **SDK:** TypeScript, ethers.js v6
+- **Blockchain:** 0G Network (Newton Testnet)
+- **Storage:** 0G Storage (planned)
 
-await firewall.setPolicy({
-  maxTransactionAmount: '10.0',
-  maxDailyAmount: '50.0',
-});
+---
 
-const result = await firewall.executeTransaction({
-  to: '0xRecipient...',
-  value: '1.0',
-  data: '0x',
-});
-```
+## 📈 Roadmap
 
-### AI Agent with Grok
+- [x] Core contracts deployed & verified
+- [x] MEV protection (commit-reveal)
+- [x] Policy enforcement working
+- [x] Frontend dashboard
+- [x] TypeScript SDK
+- [x] Documentation
+- [x] **Real blockchain integration** 🎉
+- [ ] Tenma AI agent integration
+- [ ] 0G Storage integration
+- [ ] Security audit
+- [ ] Mainnet deployment
+- [ ] Multi-chain support
 
-```typescript
-import { TenmaAgent } from '@tenma/firewall-sdk';
+---
 
-const agent = new TenmaAgent({
-  apiKey: process.env.TENMA_API_KEY!,
-  name: 'TenmaBot',
-  strategies: ['dca', 'arbitrage'],
-  riskProfile: 'moderate',
-  maxPositionSize: '1.0',
-  maxDailyTrades: 10,
-}, firewall);
+## 🎯 Key Features
 
-await agent.start();
-```
+### ✅ Implemented & Working
+
+1. **On-Chain Firewall** - Smart contracts deployed and verified on 0G Network
+2. **MEV Protection** - 5-minute commit-reveal mechanism prevents front-running
+3. **Policy Enforcement** - Amount limits, whitelists, risk scores enforced on-chain
+4. **Frontend Integration** - Fully connected to blockchain with real-time data
+5. **Real-time Events** - Live monitoring from contract events
+6. **Interactive UI** - Filters, exports, modals, settings on all pages
+7. **Intent Cross-Chain** - Better UX for multi-chain operations
+8. **Wallet Integration** - MetaMask connection with 0G Network
+
+### 🎭 Demo/Simulated
+
+1. **AI Trading Chat** - Simulated responses (SDK ready for integration)
+2. **Live Demo** - Simulated decisions (SDK ready for integration)
+3. **Cross-Chain Bridge** - UI only (needs multi-chain deployment)
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please see [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
+We welcome contributions! Please see our contributing guidelines.
+
+```bash
+# Fork the repository
+# Create a feature branch
+git checkout -b feature/amazing-feature
+
+# Commit your changes
+git commit -m 'Add amazing feature'
+
+# Push to the branch
+git push origin feature/amazing-feature
+
+# Open a Pull Request
+```
 
 ---
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
-
----
-
-## 🙏 Acknowledgments
-
-- **0G Network** - For providing the blockchain infrastructure
-- **OpenZeppelin** - For secure smart contract libraries
-- **Grok AI** - For AI agent integration
-- **Hackathon Organizers** - For the opportunity to build
-
----
-
-## 📞 Contact
-
-- **GitHub**: [github.com/yourusername/tenma-firewall](https://github.com/yourusername/tenma-firewall)
-- **Twitter**: [@yourhandle](https://twitter.com/yourhandle)
-- **Discord**: YourDiscord#1234
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
 <div align="center">
 
-**Tenma - Privacy & Sovereignty Layer for Web 4.0**
+## Built for 0G Network 🚀
 
-*Protecting the $10B+ AI Agent Economy*
+**Track: DevTooling & Privacy**
 
-[Documentation](./docs/) • [Smart Contracts](https://chainscan-newton.0g.ai/address/0x05Ef28B338B1521837Ccb8B4fDb74b2075D7D7F9) • [Live Demo](http://localhost:5175)
+*Protecting AI Agent Transactions with On-Chain Security*
 
-Built with ❤️ for 0G Network Hackathon 2025
+**Made with ❤️ by the Tenma Team**
+
+[GitHub](https://github.com/Venkat5599/Tenma) • [Documentation](./docs/) • [Live Demo](http://localhost:5174)
 
 </div>

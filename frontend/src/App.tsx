@@ -9,7 +9,7 @@ import { LiveDemo } from './pages/LiveDemo'
 import { AITradingChat } from './pages/AITradingChat'
 import { PrivacyDashboard } from './pages/PrivacyDashboard'
 import { MEVAnalytics } from './pages/MEVAnalytics'
-import { CrossChainBridge } from './pages/CrossChainBridge'
+import { IntentCrossChain } from './pages/IntentCrossChain'
 
 function App() {
   useEffect(() => {
@@ -45,7 +45,7 @@ function App() {
             <Route path="/live-demo" element={<LiveDemo />} />
             <Route path="/privacy" element={<PrivacyDashboard />} />
             <Route path="/mev-analytics" element={<MEVAnalytics />} />
-            <Route path="/cross-chain" element={<CrossChainBridge />} />
+            <Route path="/cross-chain" element={<IntentCrossChain />} />
             <Route path="/policies" element={<PolicyConfig />} />
             <Route path="/audit-logs" element={<ComingSoon title="Audit Logs" />} />
           </Routes>

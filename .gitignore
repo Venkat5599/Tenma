@@ -1,0 +1,71 @@
+# Dependencies
+node_modules/
+*/node_modules/
+**/node_modules/
+
+# Build outputs
+dist/
+build/
+*.tsbuildinfo
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+*.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Cache
+.cache/
+.parcel-cache/
+.next/
+.nuxt/
+
+# Hardhat
+cache/
+artifacts/
+typechain-types/
+
+# Frontend
+frontend/dist/
+frontend/build/
+frontend/.vite/
+
+# Contracts
+contracts/cache/
+contracts/artifacts/
+contracts/typechain-types/
+
+# SDK
+sdk/dist/
+sdk/node_modules/
+
+# Agent
+agent/node_modules/
+agent/dist/
+
+# Storage
+storage/node_modules/
+storage/dist/
+
+# Temporary files
+*.tmp
+*.temp
+.temp/

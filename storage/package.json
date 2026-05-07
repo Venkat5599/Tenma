@@ -1,0 +1,32 @@
+{
+  "name": "shieldpool-storage",
+  "version": "1.0.0",
+  "description": "0G Storage Integration for ShieldPool",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "dev": "ts-node src/index.ts"
+  },
+  "keywords": [
+    "0g",
+    "storage",
+    "decentralized",
+    "shieldpool"
+  ],
+  "dependencies": {
+    "axios": "^1.6.5",
+    "ethers": "^6.10.0",
+    "dotenv": "^16.4.1",
+    "winston": "^3.11.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.5",
+    "@types/jest": "^29.5.11",
+    "typescript": "^5.3.3",
+    "ts-node": "^10.9.2",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "name": "shieldpool-agent",
+  "version": "1.0.0",
+  "description": "Autonomous AI Agent for MEV-Protected Trading via ShieldPool",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts",
+    "test": "jest",
+    "agent:start": "ts-node src/agent.ts",
+    "strategy:dca": "ts-node src/strategies/dca.ts",
+    "strategy:arbitrage": "ts-node src/strategies/arbitrage.ts"
+  },
+  "keywords": [
+    "0g",
+    "mev",
+    "agent",
+    "trading",
+    "ai",
+    "autonomous"
+  ],
+  "dependencies": {
+    "ethers": "^6.10.0",
+    "axios": "^1.6.5",
+    "dotenv": "^16.4.1",
+    "openai": "^4.26.0",
+    "@anthropic-ai/sdk": "^0.17.0",
+    "langchain": "^0.1.20",
+    "@langchain/openai": "^0.0.14",
+    "zod": "^3.22.4",
+    "winston": "^3.11.0",
+    "cron": "^3.1.6",
+    "redis": "^4.6.12"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.5",
+    "@types/jest": "^29.5.11",
+    "typescript": "^5.3.3",
+    "ts-node": "^10.9.2",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2"
+  }
+}

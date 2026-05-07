@@ -1,0 +1,24 @@
+{
+  "zerogTestnet": {
+    "network": "0G Testnet",
+    "chainId": 16602,
+    "contractAddress": "0xD98359F3E80d11703267ff75f03bA4E1B4f7B58d",
+    "deployer": "0x1E0048D83ba01D823dc852cfabeb94fC76B089B7",
+    "executionDelay": 300,
+    "revealWindow": 86400,
+    "deployedAt": "2026-05-04T18:23:24.467Z",
+    "rpcUrl": "https://evmrpc-testnet.0g.ai",
+    "explorer": "https://chainscan-newton.0g.ai",
+    "explorerUrl": "https://chainscan-newton.0g.ai/address/0xD98359F3E80d11703267ff75f03bA4E1B4f7B58d"
+  },
+  "TenmaFirewall": {
+    "network": "0G Newton Testnet",
+    "chainId": 16602,
+    "contracts": {
+      "TenmaFirewall": "0x05Ef28B338B1521837Ccb8B4fDb74b2075D7D7F9"
+    },
+    "deployer": "0x1E0048D83ba01D823dc852cfabeb94fC76B089B7",
+    "timestamp": "2026-05-06T12:21:47.118Z",
+    "blockNumber": 31863430
+  }
+}

@@ -30,7 +30,7 @@ const TRADING_AGENTS: TradingAgent[] = [
     description: 'Dollar-cost averaging specialist. Buys consistently over time.',
     strategy: 'DCA',
     riskProfile: 'conservative',
-    avatar: '🤖',
+    avatar: 'DCA',
   },
   {
     id: 'arbitrage-bot',
@@ -38,7 +38,7 @@ const TRADING_AGENTS: TradingAgent[] = [
     description: 'Finds price differences across DEXs and exploits them.',
     strategy: 'Arbitrage',
     riskProfile: 'moderate',
-    avatar: '🎯',
+    avatar: 'ARB',
   },
   {
     id: 'momentum-bot',
@@ -46,7 +46,7 @@ const TRADING_AGENTS: TradingAgent[] = [
     description: 'Follows market trends and momentum signals.',
     strategy: 'Momentum',
     riskProfile: 'aggressive',
-    avatar: '📈',
+    avatar: 'MOM',
   },
   {
     id: 'grid-bot',
@@ -54,7 +54,7 @@ const TRADING_AGENTS: TradingAgent[] = [
     description: 'Places buy and sell orders at regular intervals.',
     strategy: 'Grid Trading',
     riskProfile: 'moderate',
-    avatar: '🔲',
+    avatar: 'GRID',
   },
 ];
 
@@ -421,7 +421,9 @@ export const AITradingChat = () => {
                   }`}
                 >
                   <div className="flex items-start gap-3">
-                    <div className="text-2xl">{agent.avatar}</div>
+                    <div className="w-10 h-10 rounded-lg bg-glass border border-glass flex items-center justify-center flex-shrink-0">
+                      <span className="text-white text-xs font-bold">{agent.avatar}</span>
+                    </div>
                     <div className="flex-1 min-w-0">
                       <div className="text-sm font-bold text-white mb-1">
                         {agent.name}
@@ -468,7 +470,9 @@ export const AITradingChat = () => {
             {/* Chat Header */}
             <div className="pb-4 border-b border-glass">
               <div className="flex items-center gap-3">
-                <div className="text-3xl">{selectedAgent.avatar}</div>
+                <div className="w-10 h-10 rounded-lg bg-glass border border-glass flex items-center justify-center">
+                  <span className="text-white text-xs font-bold">{selectedAgent.avatar}</span>
+                </div>
                 <div>
                   <div className="text-lg font-bold text-white">
                     {selectedAgent.name}
@@ -500,7 +504,9 @@ export const AITradingChat = () => {
                   >
                     {message.role === 'agent' && (
                       <div className="flex items-center gap-2 mb-2">
-                        <span className="text-lg">{selectedAgent.avatar}</span>
+                        <div className="w-6 h-6 rounded bg-glass border border-glass flex items-center justify-center">
+                          <span className="text-white text-[10px] font-bold">{selectedAgent.avatar}</span>
+                        </div>
                         <span className="text-xs font-bold text-white">
                           {selectedAgent.name}
                         </span>
@@ -531,7 +537,9 @@ export const AITradingChat = () => {
                 <div className="flex justify-start">
                   <div className="bg-glass border border-glass rounded-lg p-3">
                     <div className="flex items-center gap-2">
-                      <span className="text-lg">{selectedAgent.avatar}</span>
+                      <div className="w-6 h-6 rounded bg-glass border border-glass flex items-center justify-center">
+                        <span className="text-white text-[10px] font-bold">{selectedAgent.avatar}</span>
+                      </div>
                       <div className="flex gap-1">
                         <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
                         <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>

@@ -383,7 +383,9 @@ export const IntentCrossChain = () => {
             <div className="pb-4 border-b border-glass">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="text-3xl">🌉</div>
+                  <div className="w-10 h-10 rounded-lg bg-glass border border-glass flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">ICC</span>
+                  </div>
                   <div>
                     <div className="text-lg font-bold text-white">
                       Intent Cross-Chain Agent
@@ -422,7 +424,9 @@ export const IntentCrossChain = () => {
                   >
                     {message.role === 'agent' && (
                       <div className="flex items-center gap-2 mb-2">
-                        <span className="text-lg">🤖</span>
+                        <div className="w-6 h-6 rounded bg-glass border border-glass flex items-center justify-center">
+                          <span className="text-white text-[10px] font-bold">ICC</span>
+                        </div>
                         <span className="text-xs font-bold text-white">
                           Intent Agent
                         </span>
@@ -455,7 +459,9 @@ export const IntentCrossChain = () => {
                 <div className="flex justify-start">
                   <div className="bg-glass border border-glass rounded-lg p-3">
                     <div className="flex items-center gap-2">
-                      <span className="text-lg">🤖</span>
+                      <div className="w-6 h-6 rounded bg-glass border border-glass flex items-center justify-center">
+                        <span className="text-white text-[10px] font-bold">ICC</span>
+                      </div>
                       <div className="flex gap-1">
                         <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
                         <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>

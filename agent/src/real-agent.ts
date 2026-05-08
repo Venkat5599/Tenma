@@ -273,24 +273,40 @@ ${toolsDescription}
 
 Your task: Analyze the user's message and decide which tools to use.
 
+IMPORTANT: You MUST use tools to answer questions! Examples:
+- "What is my balance?" → use get_balance tool with address parameter
+- "What's the price?" → use get_price tool
+- "Buy 0.5 A0GI" → use buy_token with token="A0GI", amount="0.5" (purchasing tokens)
+- "Send 1 A0GI to 0x..." → use send_transaction with to="0x...", amount="1"
+
+IMPORTANT: Swapping vs Buying:
+- "Buy X A0GI" = Purchase tokens → use buy_token tool
+- "Swap X to Y" = Exchange tokens → Tell user to use Intent Cross-Chain page
+- If user asks to swap tokens, respond: "For token swaps, please use the Intent Cross-Chain page where you can swap between different tokens and chains."
+
 Response format (JSON):
 {
   "intent": "brief description of what user wants",
   "tools": [
     {
       "name": "tool_name",
-      "parameters": { "param1": "value1" },
+      "parameters": { "param1": "value1", "param2": "value2" },
       "reasoning": "why this tool is needed"
     }
   ]
 }
 
 Rules:
-1. Use low-risk tools (get_balance, get_price) freely
-2. High-risk tools (execute_swap, send_transaction) will require user approval
-3. Always check policies before suggesting transactions
-4. Be conservative with user funds
-5. If unclear, ask for clarification instead of guessing`;
+1. ALWAYS use tools to get real data - never make up information
+2. When user says "Buy X A0GI", use buy_token tool (purchasing tokens)
+3. When user asks to "Swap X to Y", redirect them to Intent Cross-Chain page (NOT available in AI Chat)
+4. Use low-risk tools (get_balance, get_price, get_transaction) freely
+5. High-risk tools (buy_token, send_transaction) will require user approval
+6. Always provide specific parameter values, not placeholders
+7. If user just says "hi" or greets, use get_balance to show their balance
+8. Be conservative with user funds
+9. AI Chat is for: balance checks, price queries, buying tokens, sending transactions
+10. Intent Cross-Chain is for: swapping tokens, cross-chain bridges`;
   }
 
   /**
@@ -334,12 +350,12 @@ Keep responses professional but friendly.`;
     // Update approval status
     await db.updateApprovalStatus(approvalId, 'approved');
 
-    // Execute the tool
+    // Execute the tool with approved flag
     try {
       const result = await toolRegistry.execute(
         approval.tool_name,
         approval.parameters,
-        { userAddress }
+        { userAddress, approved: true } // Pass approved flag
       );
 
       // Log successful execution
@@ -353,10 +369,8 @@ Keep responses professional but friendly.`;
         approved_by: userAddress,
       });
 
-      return {
-        success: true,
-        result,
-      };
+      // Return the tool result directly (not wrapped)
+      return result;
     } catch (error: any) {
       // Log failed execution
       await db.logExecution({

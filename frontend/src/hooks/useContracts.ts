@@ -320,6 +320,39 @@ export const useContracts = () => {
     };
   }, []);
 
+  // Check if wallet is already connected on mount
+  useEffect(() => {
+    const checkConnection = async () => {
+      if (window.ethereum) {
+        try {
+          const provider = new ethers.BrowserProvider(window.ethereum);
+          const accounts = await provider.send('eth_accounts', []);
+          
+          if (accounts.length > 0) {
+            // Wallet is already connected
+            const signer = await provider.getSigner();
+            const account = accounts[0];
+
+            // Create contract instances
+            const commitReveal = new ethers.Contract(COMMIT_REVEAL_ADDRESS, COMMIT_REVEAL_ABI, signer);
+            const firewall = new ethers.Contract(TENMA_FIREWALL_ADDRESS, TENMA_FIREWALL_ABI, signer);
+
+            setProvider(provider);
+            setSigner(signer);
+            setAccount(account);
+            setCommitRevealContract(commitReveal);
+            setFirewallContract(firewall);
+            setIsConnected(true);
+          }
+        } catch (error) {
+          console.error('Error checking wallet connection:', error);
+        }
+      }
+    };
+
+    checkConnection();
+  }, []);
+
   return {
     provider,
     signer,

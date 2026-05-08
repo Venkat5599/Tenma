@@ -13,6 +13,7 @@
     "api:dev": "nodemon --watch src --exec ts-node src/api-server.ts",
     "real-agent:start": "ts-node src/real-agent-api.ts",
     "real-agent:dev": "nodemon --watch src --exec ts-node src/real-agent-api.ts",
+    "setup:database": "ts-node scripts/setup-database.ts",
     "strategy:dca": "ts-node src/strategies/dca.ts",
     "strategy:arbitrage": "ts-node src/strategies/arbitrage.ts"
   },

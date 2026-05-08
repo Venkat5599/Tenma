@@ -8,18 +8,21 @@ import { Logger } from './logger';
 
 const logger = new Logger('Database');
 
-// Parse connection string
-const DATABASE_URL = process.env.DATABASE_URL || '';
-const url = new URL(DATABASE_URL);
-const supabaseUrl = `https://${url.hostname.replace('db.', '')}`;
-const supabaseKey = process.env.SUPABASE_ANON_KEY || '';
-
 export class DatabaseService {
   private client: SupabaseClient;
 
   constructor() {
+    // Get Supabase credentials from environment (loaded by dotenv in main file)
+    const supabaseUrl = process.env.SUPABASE_URL || '';
+    const supabaseKey = process.env.SUPABASE_ANON_KEY || '';
+    
+    if (!supabaseUrl || !supabaseKey) {
+      logger.error('Missing Supabase credentials. Please set SUPABASE_URL and SUPABASE_ANON_KEY in .env');
+      throw new Error('Missing Supabase credentials');
+    }
+    
     this.client = createClient(supabaseUrl, supabaseKey);
-    logger.info('Database service initialized');
+    logger.info('Database service initialized', { url: supabaseUrl });
   }
 
   // User Profiles

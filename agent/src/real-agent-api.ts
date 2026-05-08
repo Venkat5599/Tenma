@@ -3,14 +3,15 @@
  * Express server for the real agent with tools, memory, and approvals
  */
 
+// Load environment variables FIRST before any other imports
+import dotenv from 'dotenv';
+dotenv.config();
+
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import { Logger } from './logger';
 import { realAgent } from './real-agent';
 import { db } from './database';
-
-dotenv.config();
 
 const app = express();
 const logger = new Logger('RealAgentAPI');

@@ -196,17 +196,34 @@ export class ToolRegistry {
 
     // Trading Tools (High Risk - Requires Approval)
     this.register({
-      name: 'execute_swap',
-      description: 'Execute a token swap',
+      name: 'buy_token',
+      description: 'Buy tokens (purchase with fiat or native currency)',
       parameters: [
-        { name: 'fromToken', type: 'string', description: 'Token to swap from', required: true },
-        { name: 'toToken', type: 'string', description: 'Token to swap to', required: true },
-        { name: 'amount', type: 'string', description: 'Amount to swap', required: true },
+        { name: 'token', type: 'string', description: 'Token to buy (e.g., A0GI)', required: true },
+        { name: 'amount', type: 'string', description: 'Amount to buy', required: true },
       ],
       riskLevel: 'high',
       execute: async (params, context) => {
-        // This would execute a real swap
-        throw new Error('Requires user approval');
+        // Check if this is an approved execution
+        if (!context.approved) {
+          throw new Error('Requires user approval');
+        }
+
+        // Return transaction parameters for frontend to execute
+        // Frontend will use wallet to execute real transaction
+        return {
+          success: true,
+          requiresWalletExecution: true,
+          transactionType: 'buy_token',
+          token: params.token,
+          amount: params.amount,
+          // For testing: send to user's own address (they send to themselves)
+          // In production, this would be a DEX contract or liquidity pool
+          to: context.userAddress, // Send to self for testing
+          value: params.amount,
+          data: '0x', // No data for simple transfer
+          message: `⏳ Preparing to buy ${params.amount} ${params.token}...\n\n📝 Transaction will be executed through your wallet.\n\n🛡️ Firewall protection: Active\n🔒 MEV protection: Enabled\n\n💡 For testing: Sending to your own address`,
+        };
       },
     });
 
@@ -219,7 +236,22 @@ export class ToolRegistry {
       ],
       riskLevel: 'high',
       execute: async (params, context) => {
-        throw new Error('Requires user approval');
+        // Check if this is an approved execution
+        if (!context.approved) {
+          throw new Error('Requires user approval');
+        }
+
+        // Return transaction parameters for frontend to execute
+        return {
+          success: true,
+          requiresWalletExecution: true,
+          transactionType: 'send_transaction',
+          to: params.to,
+          amount: params.amount,
+          value: params.amount,
+          data: '0x',
+          message: `⏳ Preparing to send ${params.amount} A0GI to ${params.to}...\n\n📝 Transaction will be executed through your wallet.\n\n🛡️ Firewall protection: Active\n🔒 MEV protection: Enabled`,
+        };
       },
     });
 

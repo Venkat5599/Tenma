@@ -49,6 +49,31 @@ export interface DecisionResponse {
   timestamp: number;
 }
 
+export interface Approval {
+  id: string;
+  tool_name: string;
+  parameters: any;
+  risk_level: 'low' | 'medium' | 'high';
+  reasoning?: string;
+  expires_at: string;
+  created_at: string;
+  status: string;
+}
+
+export interface RealAgentChatRequest {
+  message: string;
+  address: string;
+}
+
+export interface RealAgentChatResponse {
+  message: string;
+  requiresApproval?: boolean;
+  approvalId?: string;
+  toolsExecuted?: string[];
+  responseTime?: string;
+  timestamp: number;
+}
+
 class AgentApiClient {
   private baseURL: string;
   private isAvailable: boolean = false;
@@ -137,6 +162,125 @@ class AgentApiClient {
    */
   getAvailability(): boolean {
     return this.isAvailable;
+  }
+
+  /**
+   * Chat with real agent (with tools, memory, approvals)
+   */
+  async chatWithRealAgent(request: RealAgentChatRequest): Promise<RealAgentChatResponse> {
+    try {
+      const response = await axios.post<RealAgentChatResponse>(
+        `${this.baseURL}/agent/chat`,
+        request,
+        {
+          timeout: 15000, // 15 second timeout for tool execution
+        }
+      );
+
+      console.log('🤖 Real agent response:', response.data);
+      return response.data;
+    } catch (error: any) {
+      console.error('Real agent error:', error.message);
+      throw error;
+    }
+  }
+
+  /**
+   * Get pending approvals for user
+   */
+  async getPendingApprovals(address: string): Promise<Approval[]> {
+    try {
+      const response = await axios.get<{ approvals: Approval[]; count: number }>(
+        `${this.baseURL}/agent/approvals/${address}`,
+        {
+          timeout: 5000,
+        }
+      );
+
+      return response.data.approvals;
+    } catch (error: any) {
+      console.error('Get approvals error:', error.message);
+      throw error;
+    }
+  }
+
+  /**
+   * Approve pending action
+   */
+  async approveAction(approvalId: string, address: string): Promise<any> {
+    try {
+      const response = await axios.post(
+        `${this.baseURL}/agent/approve/${approvalId}`,
+        { address },
+        {
+          timeout: 30000, // 30 seconds for blockchain transaction
+        }
+      );
+
+      console.log('✅ Action approved:', response.data);
+      return response.data;
+    } catch (error: any) {
+      console.error('Approve action error:', error.message);
+      throw error;
+    }
+  }
+
+  /**
+   * Reject pending action
+   */
+  async rejectAction(approvalId: string): Promise<void> {
+    try {
+      await axios.post(
+        `${this.baseURL}/agent/reject/${approvalId}`,
+        {},
+        {
+          timeout: 5000,
+        }
+      );
+
+      console.log('❌ Action rejected');
+    } catch (error: any) {
+      console.error('Reject action error:', error.message);
+      throw error;
+    }
+  }
+
+  /**
+   * Get execution logs for user
+   */
+  async getExecutionLogs(address: string, limit: number = 20): Promise<any[]> {
+    try {
+      const response = await axios.get(
+        `${this.baseURL}/agent/logs/${address}?limit=${limit}`,
+        {
+          timeout: 5000,
+        }
+      );
+
+      return response.data.logs || [];
+    } catch (error: any) {
+      console.error('Get logs error:', error.message);
+      throw error;
+    }
+  }
+
+  /**
+   * Get user stats
+   */
+  async getUserStats(address: string): Promise<any> {
+    try {
+      const response = await axios.get(
+        `${this.baseURL}/agent/stats/${address}`,
+        {
+          timeout: 5000,
+        }
+      );
+
+      return response.data.stats;
+    } catch (error: any) {
+      console.error('Get stats error:', error.message);
+      throw error;
+    }
   }
 
   /**

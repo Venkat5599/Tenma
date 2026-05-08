@@ -106,24 +106,26 @@ ALTER TABLE pending_approvals ENABLE ROW LEVEL SECURITY;
 ALTER TABLE agent_memory ENABLE ROW LEVEL SECURITY;
 ALTER TABLE transaction_history ENABLE ROW LEVEL SECURITY;
 
--- Policies: Users can only access their own data
-CREATE POLICY "Users can view own profile" ON user_profiles
-  FOR SELECT USING (address = current_setting('app.current_user_address', true));
+-- Policies: Allow all operations for anon role (backend service validates address)
+-- In production, you should use service_role key or implement proper JWT-based RLS
 
-CREATE POLICY "Users can update own profile" ON user_profiles
-  FOR UPDATE USING (address = current_setting('app.current_user_address', true));
+CREATE POLICY "Allow all for anon" ON user_profiles
+  FOR ALL USING (true) WITH CHECK (true);
 
-CREATE POLICY "Users can view own conversations" ON conversations
-  FOR SELECT USING (address = current_setting('app.current_user_address', true));
+CREATE POLICY "Allow all for anon" ON conversations
+  FOR ALL USING (true) WITH CHECK (true);
 
-CREATE POLICY "Users can view own execution logs" ON execution_logs
-  FOR SELECT USING (address = current_setting('app.current_user_address', true));
+CREATE POLICY "Allow all for anon" ON execution_logs
+  FOR ALL USING (true) WITH CHECK (true);
 
-CREATE POLICY "Users can view own approvals" ON pending_approvals
-  FOR SELECT USING (address = current_setting('app.current_user_address', true));
+CREATE POLICY "Allow all for anon" ON pending_approvals
+  FOR ALL USING (true) WITH CHECK (true);
 
-CREATE POLICY "Users can update own approvals" ON pending_approvals
-  FOR UPDATE USING (address = current_setting('app.current_user_address', true));
+CREATE POLICY "Allow all for anon" ON agent_memory
+  FOR ALL USING (true) WITH CHECK (true);
+
+CREATE POLICY "Allow all for anon" ON transaction_history
+  FOR ALL USING (true) WITH CHECK (true);
 
 -- Functions for common operations
 CREATE OR REPLACE FUNCTION get_conversation_history(user_address TEXT, limit_count INTEGER DEFAULT 10)

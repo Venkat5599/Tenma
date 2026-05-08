@@ -25,6 +25,7 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.17.0",
     "@langchain/openai": "^0.0.14",
+    "@supabase/supabase-js": "^2.105.3",
     "axios": "^1.6.5",
     "cors": "^2.8.5",
     "cron": "^3.1.6",

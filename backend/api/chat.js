@@ -103,7 +103,7 @@ Respond in a helpful, professional manner. Keep responses concise and actionable
     return res.status(200).json({
       response,
       provider: 'groq',
-      model: 'llama-3.1-70b-versatile',
+      model: 'llama-3.3-70b-versatile',
       responseTime: `${responseTime}ms`,
       timestamp: Date.now(),
     });

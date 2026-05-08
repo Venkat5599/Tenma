@@ -110,7 +110,7 @@ Remember: The Tenma Firewall will validate your transaction against on-chain pol
         timestamp: Date.now(),
       },
       provider: 'groq',
-      model: 'llama-3.1-70b-versatile',
+      model: 'llama-3.3-70b-versatile',
       responseTime: `${responseTime}ms`,
       timestamp: Date.now(),
     });

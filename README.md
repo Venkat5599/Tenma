@@ -387,7 +387,38 @@ Tenma/
 - [Architecture](./docs/ARCHITECTURE.md) - Technical deep-dive
 - [Deployment Guide](./docs/DEPLOYMENT.md) - How to deploy
 - [SDK Documentation](./docs/SDK.md) - Complete SDK reference
+- [Vercel Environment Setup](./vercel-env-setup.md) - Production deployment
 - [Implementation Status](./docs/IMPLEMENTATION-STATUS.md) - What's real vs demo
+
+---
+
+## 🤖 AI Agent Features
+
+### Groq-Powered Intelligence
+
+Tenma uses **Groq AI** with the Llama 3.3 70B model for ultra-fast AI responses:
+
+- **Real-time Trading Decisions** - Analyze market data and execute trades
+- **Natural Language Processing** - Understand complex trading commands
+- **Risk Assessment** - Evaluate transaction safety before execution
+- **Memory System** - Remember conversation context and past decisions
+- **11+ Tools** - Balance checks, price queries, token purchases, transfers, and more
+
+### Database & Memory
+
+- **Supabase PostgreSQL** - Persistent storage for conversations
+- **Conversation History** - Track all interactions with the AI agent
+- **Execution Logs** - Audit trail of all transactions
+- **User Profiles** - Personalized settings and preferences
+- **Pending Approvals** - Queue for transaction confirmations
+
+### Real Blockchain Transactions
+
+- **MetaMask Integration** - Execute real transactions on 0G Network
+- **Wallet Execution** - All transactions go through user's wallet
+- **Transaction Parameters** - AI agent prepares, user approves
+- **Balance Checking** - Verify funds before execution
+- **Gas Estimation** - Automatic gas limit calculation
 
 ---
 
@@ -465,10 +496,12 @@ npx hardhat run scripts/demo-firewall-flow.ts --network 0g-testnet
 | Resource | URL |
 |----------|-----|
 | **GitHub Repository** | [github.com/Venkat5599/Tenma](https://github.com/Venkat5599/Tenma) |
+| **NPM Package** | [npmjs.com/package/tenma-firewall-sdk](https://www.npmjs.com/package/tenma-firewall-sdk) |
 | **TenmaFirewall Contract** | [View on Explorer](https://chainscan-newton.0g.ai/address/0x05Ef28B338B1521837Ccb8B4fDb74b2075D7D7F9) |
 | **CommitReveal Contract** | [View on Explorer](https://chainscan-newton.0g.ai/address/0xD98359F3E80d11703267ff75f03bA4E1B4f7B58d) |
 | **0G Network** | [0g.ai](https://0g.ai) |
 | **0G Faucet** | [Get Test A0GI](https://faucet.0g.ai) |
+| **Groq AI** | [groq.com](https://groq.com) |
 
 ---
 
@@ -477,7 +510,9 @@ npx hardhat run scripts/demo-firewall-flow.ts --network 0g-testnet
 - **Smart Contracts:** Solidity 0.8.19
 - **Development:** Hardhat, TypeScript
 - **Frontend:** React, Vite, TailwindCSS
-- **SDK:** TypeScript, ethers.js v6
+- **SDK:** TypeScript, ethers.js v6 (Published on NPM)
+- **AI Agent:** Groq AI (Llama 3.3 70B)
+- **Database:** Supabase (PostgreSQL with RLS)
 - **Blockchain:** 0G Network (Newton Testnet)
 - **Storage:** 0G Storage (planned)
 
@@ -489,10 +524,11 @@ npx hardhat run scripts/demo-firewall-flow.ts --network 0g-testnet
 - [x] MEV protection (commit-reveal)
 - [x] Policy enforcement working
 - [x] Frontend dashboard
-- [x] TypeScript SDK
+- [x] TypeScript SDK published to NPM
 - [x] Documentation
 - [x] **Real blockchain integration** 🎉
-- [ ] Tenma AI agent integration
+- [x] **Tenma AI agent integration** (Groq-powered)
+- [x] **Real-time database** (Supabase)
 - [ ] 0G Storage integration
 - [ ] Security audit
 - [ ] Mainnet deployment
@@ -512,12 +548,15 @@ npx hardhat run scripts/demo-firewall-flow.ts --network 0g-testnet
 6. **Interactive UI** - Filters, exports, modals, settings on all pages
 7. **Intent Cross-Chain** - Better UX for multi-chain operations
 8. **Wallet Integration** - MetaMask connection with 0G Network
+9. **AI Agent Integration** - Groq-powered AI agent with 11+ tools
+10. **NPM SDK** - Published as `tenma-firewall-sdk@1.0.0`
+11. **Database** - Supabase for conversation history and execution logs
+12. **Real Transactions** - Execute actual blockchain transactions via MetaMask
 
 ### 🎭 Demo/Simulated
 
-1. **AI Trading Chat** - Simulated responses (SDK ready for integration)
-2. **Live Demo** - Simulated decisions (SDK ready for integration)
-3. **Cross-Chain Bridge** - UI only (needs multi-chain deployment)
+1. **Cross-Chain Bridge** - UI only (needs multi-chain deployment)
+2. **0G Storage** - Planned integration
 
 ---
 

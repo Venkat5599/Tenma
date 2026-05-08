@@ -85,7 +85,7 @@ class AgentApiClient {
       }
 
       const response = await axios.post<ChatResponse>(
-        `${this.baseURL}/agent/chat`,
+        `${this.baseURL}/api/chat`,
         request,
         {
           timeout: 10000, // 10 second timeout
@@ -116,7 +116,7 @@ class AgentApiClient {
       }
 
       const response = await axios.post<DecisionResponse>(
-        `${this.baseURL}/agent/decision`,
+        `${this.baseURL}/api/decision`,
         request,
         {
           timeout: 10000,

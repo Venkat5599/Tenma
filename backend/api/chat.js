@@ -90,7 +90,7 @@ Respond in a helpful, professional manner. Keep responses concise and actionable
           content: message,
         },
       ],
-      model: 'llama-3.1-70b-versatile',
+      model: 'llama-3.3-70b-versatile',
       temperature: 0.7,
       max_tokens: 500,
       top_p: 1,

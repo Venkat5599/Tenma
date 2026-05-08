@@ -420,6 +420,23 @@ Tenma uses **Groq AI** with the Llama 3.3 70B model for ultra-fast AI responses:
 - **Balance Checking** - Verify funds before execution
 - **Gas Estimation** - Automatic gas limit calculation
 
+### 0G Storage Integration
+
+- **ZeroGStorageClient** - Full client library for 0G Storage network
+- **Encrypted Payloads** - Store transaction data securely
+- **Agent Memory** - Persistent storage for AI agent decisions and history
+- **Retry Logic** - Automatic retry with exponential backoff
+- **Compression** - Gzip compression for efficient storage
+- **Encryption** - AES-256-GCM encryption for sensitive data
+- **Storage Stats** - Track usage and performance metrics
+
+**Storage Features:**
+- Upload/retrieve/delete operations
+- Batch operations for multiple files
+- Metadata management
+- TTL (Time-to-Live) support
+- Network redundancy
+
 ---
 
 ## 🖥️ Frontend Features
@@ -513,8 +530,8 @@ npx hardhat run scripts/demo-firewall-flow.ts --network 0g-testnet
 - **SDK:** TypeScript, ethers.js v6 (Published on NPM)
 - **AI Agent:** Groq AI (Llama 3.3 70B)
 - **Database:** Supabase (PostgreSQL with RLS)
+- **Storage:** 0G Storage (Encrypted payloads)
 - **Blockchain:** 0G Network (Newton Testnet)
-- **Storage:** 0G Storage (planned)
 
 ---
 
@@ -529,7 +546,7 @@ npx hardhat run scripts/demo-firewall-flow.ts --network 0g-testnet
 - [x] **Real blockchain integration** 🎉
 - [x] **Tenma AI agent integration** (Groq-powered)
 - [x] **Real-time database** (Supabase)
-- [ ] 0G Storage integration
+- [x] **0G Storage integration** (Encrypted payloads)
 - [ ] Security audit
 - [ ] Mainnet deployment
 - [ ] Multi-chain support
@@ -552,11 +569,11 @@ npx hardhat run scripts/demo-firewall-flow.ts --network 0g-testnet
 10. **NPM SDK** - Published as `tenma-firewall-sdk@1.0.0`
 11. **Database** - Supabase for conversation history and execution logs
 12. **Real Transactions** - Execute actual blockchain transactions via MetaMask
+13. **0G Storage Integration** - Encrypted payload storage for agent memory and transaction data
 
 ### 🎭 Demo/Simulated
 
 1. **Cross-Chain Bridge** - UI only (needs multi-chain deployment)
-2. **0G Storage** - Planned integration
 
 ---
 

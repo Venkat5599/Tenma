@@ -70,6 +70,9 @@ agent/dist/
 backend/node_modules/
 backend/.vercel/
 
+# Vercel
+.vercel/
+
 # Storage
 storage/node_modules/
 storage/dist/

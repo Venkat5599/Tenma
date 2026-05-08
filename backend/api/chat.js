@@ -6,11 +6,6 @@
 
 import Groq from 'groq-sdk';
 
-// Initialize Groq client
-const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY || '',
-});
-
 export default async function handler(req, res) {
   // CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -40,6 +35,15 @@ export default async function handler(req, res) {
     if (!message) {
       return res.status(400).json({ error: 'Message is required' });
     }
+
+    // Initialize Groq client inside handler to access env vars
+    const groq = new Groq({
+      apiKey: process.env.GROQ_API_KEY || '',
+    });
+
+    // Log API key status (without exposing the key)
+    console.log('GROQ_API_KEY exists:', !!process.env.GROQ_API_KEY);
+    console.log('GROQ_API_KEY length:', process.env.GROQ_API_KEY?.length || 0);
 
     // Build system prompt
     const systemPrompt = `You are a Tenma AI trading agent with a ${riskProfile} risk profile, specializing in ${strategy} strategy.

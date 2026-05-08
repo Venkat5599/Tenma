@@ -109,12 +109,18 @@ Respond in a helpful, professional manner. Keep responses concise and actionable
     });
   } catch (error) {
     console.error('Chat error:', error);
+    console.error('Error details:', {
+      message: error.message,
+      name: error.name,
+      stack: error.stack?.substring(0, 200),
+    });
 
     // Return fallback response on error
     return res.status(200).json({
       response: generateFallbackResponse(req.body),
       provider: 'fallback',
       model: 'local',
+      error: error.message,
       timestamp: Date.now(),
     });
   }

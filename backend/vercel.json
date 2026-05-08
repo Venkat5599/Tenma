@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "name": "tenma-backend",
+  "builds": [
+    {
+      "src": "api/**/*.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    }
+  ],
+  "env": {
+    "GROQ_API_KEY": "@groq-api-key"
+  }
+}

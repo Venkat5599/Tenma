@@ -1,0 +1,23 @@
+{
+  "name": "tenma-backend",
+  "version": "1.0.0",
+  "description": "Serverless backend for Tenma AI Trading Agent",
+  "main": "api/health.js",
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "keywords": [
+    "tenma",
+    "groq",
+    "ai",
+    "trading",
+    "serverless"
+  ],
+  "dependencies": {
+    "groq-sdk": "^0.7.0"
+  },
+  "devDependencies": {
+    "@vercel/node": "^3.0.0"
+  }
+}

@@ -66,6 +66,10 @@ sdk/node_modules/
 agent/node_modules/
 agent/dist/
 
+# Backend
+backend/node_modules/
+backend/.vercel/
+
 # Storage
 storage/node_modules/
 storage/dist/

@@ -211,7 +211,7 @@ app.post('/agent/profile/:address', async (req, res) => {
 });
 
 // Start server
-const PORT = process.env.AGENT_API_PORT || 3001;
+const PORT = process.env.PORT || process.env.AGENT_API_PORT || 3001;
 
 app.listen(PORT, () => {
   logger.info(`Real Agent API server running on port ${PORT}`);

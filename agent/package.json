@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
-    "start": "node dist/index.js",
+    "start": "node dist/real-agent-api.js",
     "dev": "ts-node src/index.ts",
     "test": "jest",
     "agent:start": "ts-node src/agent.ts",
@@ -15,7 +15,8 @@
     "real-agent:dev": "nodemon --watch src --exec ts-node src/real-agent-api.ts",
     "setup:database": "ts-node scripts/setup-database.ts",
     "strategy:dca": "ts-node src/strategies/dca.ts",
-    "strategy:arbitrage": "ts-node src/strategies/arbitrage.ts"
+    "strategy:arbitrage": "ts-node src/strategies/arbitrage.ts",
+    "postinstall": "npm run build"
   },
   "keywords": [
     "0g",

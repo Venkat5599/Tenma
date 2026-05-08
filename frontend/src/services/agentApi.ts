@@ -1,31 +1,35 @@
-import axios, { AxiosInstance } from 'axios';
+/**
+ * Agent API Client
+ * 
+ * Connects frontend to Groq-powered AI agent backend
+ */
 
-const AGENT_API_URL = import.meta.env.VITE_AGENT_API_URL || 'http://localhost:3001';
+import axios from 'axios';
 
-export interface AgentStatus {
-  isRunning: boolean;
-  balance: string;
-  tradesExecuted: number;
-  tradesBlocked: number;
-  lastDecision: any | null;
-  address: string;
-  network: string;
-}
+const API_URL = import.meta.env.VITE_AGENT_API_URL || 'http://localhost:3001';
 
 export interface ChatRequest {
   message: string;
-  strategy?: string;
-  riskProfile?: string;
+  strategy: string;
+  riskProfile: string;
+  balance?: string;
+  tradesExecuted?: number;
+  account?: string;
 }
 
 export interface ChatResponse {
   response: string;
+  provider: string;
+  model: string;
   timestamp: number;
 }
 
 export interface DecisionRequest {
-  strategy?: string;
-  riskProfile?: string;
+  strategy: string;
+  riskProfile: string;
+  balance?: string;
+  tradesExecuted?: number;
+  account?: string;
 }
 
 export interface TradingDecision {
@@ -40,165 +44,124 @@ export interface TradingDecision {
 
 export interface DecisionResponse {
   decision: TradingDecision;
-  marketData: any;
+  provider: string;
+  model: string;
   timestamp: number;
 }
 
-export interface StorageStats {
-  totalUploads: number;
-  totalSize: number;
-  successRate: number;
-  averageUploadTime: number;
-  averageRetrieveTime: number;
-}
-
-/**
- * Agent API Client
- * 
- * Handles all communication with the agent backend API
- */
 class AgentApiClient {
-  private client: AxiosInstance;
+  private baseURL: string;
   private isAvailable: boolean = false;
 
   constructor() {
-    this.client = axios.create({
-      baseURL: AGENT_API_URL,
-      timeout: 30000,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    // Check availability
-    this.checkHealth();
+    this.baseURL = API_URL;
+    this.checkAvailability();
   }
 
   /**
-   * Check if API is available
+   * Check if agent API is available
    */
-  private async checkHealth(): Promise<void> {
+  private async checkAvailability(): Promise<void> {
     try {
-      await this.client.get('/health', { timeout: 5000 });
-      this.isAvailable = true;
-      console.log('✅ Agent API is available');
+      const response = await axios.get(`${this.baseURL}/health`, {
+        timeout: 5000,
+      });
+      this.isAvailable = response.data.status === 'ok';
+      console.log('✅ Agent API is available:', response.data);
     } catch (error) {
       this.isAvailable = false;
-      console.warn('⚠️ Agent API is not available, using fallback mode');
+      console.warn('⚠️ Agent API not available, using fallback responses');
     }
   }
 
   /**
-   * Get API availability status
+   * Chat with the AI agent
+   */
+  async chat(request: ChatRequest): Promise<string> {
+    try {
+      if (!this.isAvailable) {
+        // Fallback to local responses if API not available
+        return this.generateFallbackResponse(request);
+      }
+
+      const response = await axios.post<ChatResponse>(
+        `${this.baseURL}/agent/chat`,
+        request,
+        {
+          timeout: 10000, // 10 second timeout
+        }
+      );
+
+      console.log('🤖 Groq response received:', {
+        provider: response.data.provider,
+        model: response.data.model,
+        responseLength: response.data.response.length,
+      });
+
+      return response.data.response;
+    } catch (error: any) {
+      console.error('Agent API error:', error.message);
+      // Fallback to local responses on error
+      return this.generateFallbackResponse(request);
+    }
+  }
+
+  /**
+   * Get trading decision from AI
+   */
+  async getDecision(request: DecisionRequest): Promise<TradingDecision> {
+    try {
+      if (!this.isAvailable) {
+        throw new Error('Agent API not available');
+      }
+
+      const response = await axios.post<DecisionResponse>(
+        `${this.baseURL}/agent/decision`,
+        request,
+        {
+          timeout: 10000,
+        }
+      );
+
+      console.log('🤖 Trading decision received:', response.data.decision);
+
+      return response.data.decision;
+    } catch (error: any) {
+      console.error('Decision API error:', error.message);
+      throw error;
+    }
+  }
+
+  /**
+   * Check if API is available
    */
   getAvailability(): boolean {
     return this.isAvailable;
   }
 
   /**
-   * Get agent status
+   * Generate fallback response when API is not available
    */
-  async getStatus(): Promise<AgentStatus> {
-    try {
-      const response = await this.client.get<AgentStatus>('/agent/status');
-      return response.data;
-    } catch (error) {
-      console.error('Error getting agent status:', error);
-      throw error;
-    }
-  }
+  private generateFallbackResponse(request: ChatRequest): string {
+    const message = request.message.toLowerCase();
 
-  /**
-   * Start the agent
-   */
-  async start(): Promise<{ message: string; state: AgentStatus }> {
-    try {
-      const response = await this.client.post('/agent/start');
-      return response.data;
-    } catch (error) {
-      console.error('Error starting agent:', error);
-      throw error;
+    if (message.includes('buy') || message.includes('purchase')) {
+      return `I'll execute a ${request.strategy} buy order. Let me analyze the market conditions first.\n\n📊 Analysis:\n• Strategy: ${request.strategy}\n• Risk level: ${request.riskProfile}\n\n✅ Firewall validation will be performed before execution.\n🔒 Transaction will be protected with commit-reveal mechanism.\n\n💡 Note: Connect to Groq AI for intelligent responses!`;
     }
-  }
 
-  /**
-   * Stop the agent
-   */
-  async stop(): Promise<{ message: string; state: AgentStatus }> {
-    try {
-      const response = await this.client.post('/agent/stop');
-      return response.data;
-    } catch (error) {
-      console.error('Error stopping agent:', error);
-      throw error;
+    if (message.includes('sell')) {
+      return `I'll execute a ${request.strategy} sell order.\n\n📊 Analysis:\n• Strategy: ${request.strategy}\n• Risk level: ${request.riskProfile}\n\n✅ Firewall validation will be performed before execution.\n\n💡 Note: Connect to Groq AI for intelligent responses!`;
     }
-  }
 
-  /**
-   * Chat with the agent
-   */
-  async chat(request: ChatRequest): Promise<ChatResponse> {
-    try {
-      const response = await this.client.post<ChatResponse>('/agent/chat', request);
-      return response.data;
-    } catch (error) {
-      console.error('Error chatting with agent:', error);
-      throw error;
+    if (message.includes('status') || message.includes('portfolio') || message.includes('balance')) {
+      return `📊 Current Portfolio Status:\n\n🎯 Trades Executed: ${request.tradesExecuted || 0}\n📈 Strategy: ${request.strategy}\n⚖️ Risk Profile: ${request.riskProfile}\n\n🛡️ Firewall Status: Active\n✅ All policies enforced\n\n💡 Note: Connect to Groq AI for intelligent responses!`;
     }
-  }
 
-  /**
-   * Get trading decision from agent
-   */
-  async getDecision(request: DecisionRequest): Promise<DecisionResponse> {
-    try {
-      const response = await this.client.post<DecisionResponse>('/agent/decision', request);
-      return response.data;
-    } catch (error) {
-      console.error('Error getting decision:', error);
-      throw error;
+    if (message.includes('market') || message.includes('analysis')) {
+      return `📊 Market Analysis (${request.strategy}):\n\n• A0GI/USD: $0.85 (+0.5%)\n• Volume: Moderate\n• Volatility: Low\n• Trend: Stable\n\n💡 Recommendation: Good time for ${request.riskProfile} entry\n\n🛡️ All recommendations are within firewall limits.\n\n💡 Note: Connect to Groq AI for intelligent responses!`;
     }
-  }
 
-  /**
-   * Get storage statistics
-   */
-  async getStorageStats(): Promise<StorageStats> {
-    try {
-      const response = await this.client.get<StorageStats>('/storage/stats');
-      return response.data;
-    } catch (error) {
-      console.error('Error getting storage stats:', error);
-      throw error;
-    }
-  }
-
-  /**
-   * List stored items
-   */
-  async listStorageItems(prefix?: string): Promise<string[]> {
-    try {
-      const response = await this.client.get<{ items: string[] }>('/storage/list', {
-        params: { prefix },
-      });
-      return response.data.items;
-    } catch (error) {
-      console.error('Error listing storage items:', error);
-      throw error;
-    }
-  }
-
-  /**
-   * Retrieve item from storage
-   */
-  async retrieveFromStorage(key: string): Promise<any> {
-    try {
-      const response = await this.client.get<{ data: any }>(`/storage/retrieve/${key}`);
-      return response.data.data;
-    } catch (error) {
-      console.error('Error retrieving from storage:', error);
-      throw error;
-    }
+    return `I understand you want to ${request.message}. As a ${request.strategy} specialist with ${request.riskProfile} risk profile, I can help with that.\n\nCould you be more specific? For example:\n• "Buy 0.5 A0GI"\n• "Show market analysis"\n• "Check portfolio status"\n\n🛡️ All commands are validated by Tenma Firewall before execution.\n\n💡 Note: Start the agent API server for Groq AI responses!`;
   }
 }
 

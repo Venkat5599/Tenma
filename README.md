@@ -71,6 +71,34 @@ The future of blockchain is autonomous AI agents managing funds. 0G Network is p
 | **TenmaFirewall** | `0x05Ef28B338B1521837Ccb8B4fDb74b2075D7D7F9` | [✅ View Code](https://chainscan-newton.0g.ai/address/0x05Ef28B338B1521837Ccb8B4fDb74b2075D7D7F9) |
 | **CommitRevealContract** | `0xD98359F3E80d11703267ff75f03bA4E1B4f7B58d` | [✅ View Code](https://chainscan-newton.0g.ai/address/0xD98359F3E80d11703267ff75f03bA4E1B4f7B58d) |
 
+### AI Agent API (Groq-Powered)
+
+**Option 1: Serverless (Recommended)** 🚀
+- Deploy to Vercel in 3 commands
+- Free tier: 100K requests/month
+- Auto-scaling, global CDN
+- Zero maintenance
+
+```bash
+npm install -g vercel
+vercel login
+vercel --prod
+```
+
+See [SERVERLESS-DEPLOYMENT.md](./SERVERLESS-DEPLOYMENT.md) for details.
+
+**Option 2: Local Server**
+- Run on your machine
+- Good for development
+
+```bash
+cd agent
+npm install groq-sdk
+npm run api:dev
+```
+
+See [GROQ-SETUP.md](./GROQ-SETUP.md) for details.
+
 ### Network Details
 
 ```

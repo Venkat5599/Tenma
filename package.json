@@ -1,0 +1,25 @@
+{
+  "name": "tenma-serverless-api",
+  "version": "1.0.0",
+  "description": "Serverless API for Tenma AI Trading Agent powered by Groq",
+  "main": "api/health.ts",
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "keywords": [
+    "tenma",
+    "groq",
+    "ai",
+    "trading",
+    "serverless",
+    "vercel"
+  ],
+  "dependencies": {
+    "groq-sdk": "^0.7.0"
+  },
+  "devDependencies": {
+    "@vercel/node": "^3.0.0",
+    "typescript": "^5.3.3"
+  }
+}

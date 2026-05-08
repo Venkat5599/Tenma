@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { useContracts } from '../hooks/useContracts';
-import { ethers } from 'ethers';
+import { useTransactionStats } from '../hooks/useTransactionStats';
+import { agentApi } from '../services/agentApi';
 
 interface Message {
   id: string;
@@ -81,18 +82,21 @@ export const AITradingChat = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const [isExecuting, setIsExecuting] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
   // Get wallet and contract access
   const {
     account,
     isConnected,
-    connectWallet,
     simulateTransaction,
     commitTransaction,
     revealTransaction,
+    firewallContract,
+    commitRevealContract,
   } = useContracts();
+
+  // Get transaction stats tracker
+  const { stats, recordClientSideBlock } = useTransactionStats(firewallContract, commitRevealContract);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -139,6 +143,39 @@ export const AITradingChat = () => {
     setMessages(welcomeMessages);
   }, [selectedAgent, isConnected, account]);
 
+  // Update messages when wallet connection changes
+  useEffect(() => {
+    if (messages.length > 0) {
+      // Check if we need to update wallet status message
+      const hasWalletStatusMessage = messages.some(
+        m => m.id === 'wallet-connected' || m.id === 'wallet-not-connected'
+      );
+
+      if (hasWalletStatusMessage) {
+        // Remove old wallet status messages and add new one
+        setMessages(prev => {
+          const filtered = prev.filter(
+            m => m.id !== 'wallet-connected' && m.id !== 'wallet-not-connected'
+          );
+
+          if (isConnected && account) {
+            return [
+              ...filtered,
+              {
+                id: 'wallet-connected',
+                role: 'system',
+                content: `✅ Wallet Connected: ${account.slice(0, 6)}...${account.slice(-4)}\n\nI now have access to your wallet and can execute real transactions on 0G Newton Testnet.`,
+                timestamp: Date.now(),
+              },
+            ];
+          }
+
+          return filtered;
+        });
+      }
+    }
+  }, [isConnected, account]);
+
   const checkForSuspiciousContent = (text: string): { blocked: boolean; reason?: string } => {
     for (const { pattern, reason, check } of SUSPICIOUS_PATTERNS) {
       const match = text.match(pattern);
@@ -167,7 +204,6 @@ export const AITradingChat = () => {
     }
 
     try {
-      setIsExecuting(true);
 
       // Step 1: Simulate transaction first
       const simulation = await simulateTransaction(recipient, amount);
@@ -234,8 +270,6 @@ export const AITradingChat = () => {
         success: false,
         message: `Transaction failed: ${error.message || 'Unknown error'}`,
       };
-    } finally {
-      setIsExecuting(false);
     }
   };
 
@@ -261,6 +295,29 @@ export const AITradingChat = () => {
       }
     }
 
+    // For all other messages, use Groq AI
+    try {
+      const response = await agentApi.chat({
+        message: userMessage,
+        strategy: selectedAgent.strategy,
+        riskProfile: selectedAgent.riskProfile,
+        balance: '0',
+        tradesExecuted: stats.executedTransactions,
+        account: account || undefined,
+      });
+
+      return response;
+    } catch (error) {
+      console.error('Groq API error:', error);
+      // Fallback to hardcoded responses
+      return generateFallbackResponse(userMessage);
+    }
+  };
+
+  // Fallback responses when Groq is not available
+  const generateFallbackResponse = (userMessage: string): string => {
+    const lowerMessage = userMessage.toLowerCase();
+
     // Sell commands
     if (lowerMessage.includes('sell')) {
       const amountMatch = userMessage.match(/(\d+(\.\d+)?)\s*(eth|a0gi)/i);
@@ -275,7 +332,11 @@ export const AITradingChat = () => {
 
     // Status/portfolio commands
     if (lowerMessage.includes('status') || lowerMessage.includes('portfolio') || lowerMessage.includes('balance')) {
-      return `📊 Current Portfolio Status:\n\n💰 Wallet: ${account ? `${account.slice(0, 6)}...${account.slice(-4)}` : 'Not connected'}\n🌐 Network: 0G Newton Testnet\n${isConnected ? '✅ Connected and ready to trade' : '❌ Not connected'}\n\n🛡️ Firewall Status: Active\n✅ All policies enforced\n🔒 MEV protection enabled\n\n${isConnected ? '💡 Try: "Buy 0.01 A0GI" to execute a real transaction!' : '💡 Connect your wallet to start trading'}`;
+      if (!isConnected || !account) {
+        return `📊 Current Portfolio Status:\n\n❌ Wallet: Not connected\n🌐 Network: 0G Newton Testnet\n\n💡 Connect your wallet to view your portfolio and start trading.\n\n🛡️ Firewall Status: Active\n✅ All policies enforced\n🔒 MEV protection enabled`;
+      }
+      
+      return `📊 Current Portfolio Status:\n\n💰 Wallet: ${account.slice(0, 6)}...${account.slice(-4)}\n🌐 Network: 0G Newton Testnet\n✅ Connected and ready to trade\n\n🛡️ Firewall Status: Active\n✅ All policies enforced\n🔒 MEV protection enabled\n\n💡 Try: "Buy 0.01 A0GI" to execute a real transaction!`;
     }
 
     // Market analysis
@@ -306,6 +367,9 @@ export const AITradingChat = () => {
     const { blocked, reason } = checkForSuspiciousContent(input);
 
     if (blocked) {
+      // Record client-side block in stats
+      recordClientSideBlock();
+      
       // Add user message
       setMessages(prev => [...prev, userMessage]);
       
@@ -355,7 +419,7 @@ export const AITradingChat = () => {
     }
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSend();
@@ -459,6 +523,31 @@ export const AITradingChat = () => {
               </div>
               <div className="text-xs text-gray-light">
                 All commands validated before execution
+              </div>
+            </div>
+
+            {/* Live Stats */}
+            <div className="mt-6 p-3 rounded-lg bg-glass border border-glass">
+              <div className="text-xs font-bold text-white uppercase mb-3">
+                Live Statistics
+              </div>
+              <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="text-xs text-gray-light">Total</span>
+                  <span className="text-sm font-bold text-white">{stats.totalTransactions}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-xs text-gray-light">Executed</span>
+                  <span className="text-sm font-bold text-green-400">{stats.executedTransactions}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-xs text-gray-light">Blocked</span>
+                  <span className="text-sm font-bold text-red-400">{stats.blockedTransactions}</span>
+                </div>
+                <div className="flex justify-between items-center pt-2 border-t border-glass">
+                  <span className="text-xs text-gray-light">Block Rate</span>
+                  <span className="text-sm font-bold text-white">{stats.blockRate.toFixed(1)}%</span>
+                </div>
               </div>
             </div>
           </div>
@@ -577,7 +666,7 @@ export const AITradingChat = () => {
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  onKeyPress={handleKeyPress}
+                  onKeyDown={handleKeyDown}
                   placeholder="Type your command... (e.g., 'Buy 0.5 A0GI')"
                   className="input flex-1"
                 />

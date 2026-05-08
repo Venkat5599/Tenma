@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useContracts } from '../hooks/useContracts'
-import { useContractEvents } from '../hooks/useContractEvents'
+import { useTransactionStats } from '../hooks/useTransactionStats'
 
 export const Dashboard = () => {
   const {
@@ -12,7 +12,7 @@ export const Dashboard = () => {
     commitRevealContract,
   } = useContracts()
 
-  const { stats: contractStats } = useContractEvents(firewallContract, commitRevealContract)
+  const { stats: contractStats } = useTransactionStats(firewallContract, commitRevealContract)
 
   const stats = [
     { 

@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useContracts } from '../hooks/useContracts';
-import { ethers } from 'ethers';
 import { Button } from '@/components/ui/button';
 import { storageService } from '../services/storageService';
 import { x402Service } from '../services/x402Service';
@@ -73,7 +72,6 @@ export const IntentCrossChain = () => {
     account,
     isConnected,
     connectWallet,
-    provider,
     commitTransaction,
     simulateTransaction,
   } = useContracts();
@@ -380,7 +378,7 @@ export const IntentCrossChain = () => {
     await executeSwap(intent);
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSubmit();
@@ -504,7 +502,7 @@ export const IntentCrossChain = () => {
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  onKeyPress={handleKeyPress}
+                  onKeyDown={handleKeyDown}
                   placeholder='Try: "Swap 0.01 A0GI to ETH"'
                   className="input flex-1"
                   disabled={isProcessing}

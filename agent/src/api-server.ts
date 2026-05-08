@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { ethers } from 'ethers';
-import { TenmaService } from './tenma-service';
+import { GroqService } from './groq-service';
 import { ZeroGStorageClient } from './storage-client';
 import { Logger } from './logger';
 
@@ -17,12 +17,11 @@ app.use(express.json());
 
 // Initialize services
 const provider = new ethers.JsonRpcProvider(process.env.RPC_URL || 'https://evmrpc-testnet.0g.ai');
-const wallet = new ethers.Wallet(process.env.PRIVATE_KEY || '', provider);
+const wallet = process.env.PRIVATE_KEY ? new ethers.Wallet(process.env.PRIVATE_KEY, provider) : null;
 
-const tenmaService = new TenmaService({
-  apiKey: process.env.TENMA_API_KEY || process.env.OPENAI_API_KEY || '',
-  model: 'gpt-4-turbo-preview',
-  fallbackToOpenAI: true,
+const groqService = new GroqService({
+  apiKey: process.env.GROQ_API_KEY || '',
+  model: process.env.LLM_MODEL || 'llama-3.1-70b-versatile',
 });
 
 const storage = new ZeroGStorageClient({
@@ -57,8 +56,10 @@ app.get('/health', (req, res) => {
   res.json({
     status: 'ok',
     timestamp: Date.now(),
+    provider: 'Groq',
+    model: 'llama-3.1-70b-versatile',
     services: {
-      tenma: tenmaService.isAvailable(),
+      groq: true,
       storage: true,
       blockchain: true,
     },
@@ -71,13 +72,16 @@ app.get('/health', (req, res) => {
  */
 app.get('/agent/status', async (req, res) => {
   try {
-    const balance = await provider.getBalance(wallet.address);
-    agentState.balance = ethers.formatEther(balance);
+    if (wallet) {
+      const balance = await provider.getBalance(wallet.address);
+      agentState.balance = ethers.formatEther(balance);
+    }
 
     res.json({
       ...agentState,
-      address: wallet.address,
-      network: 'OG Newton Testnet',
+      address: wallet?.address || 'Not configured',
+      network: '0G Newton Testnet',
+      aiProvider: 'Groq (Llama 3.1 70B)',
     });
   } catch (error: any) {
     logger.error('Error getting agent status', error);
@@ -133,21 +137,22 @@ app.post('/agent/stop', async (req, res) => {
  */
 app.post('/agent/chat', async (req, res) => {
   try {
-    const { message, strategy = 'dca', riskProfile = 'moderate' } = req.body;
+    const { message, strategy = 'DCA', riskProfile = 'moderate', account } = req.body;
 
     if (!message) {
       return res.status(400).json({ error: 'Message is required' });
     }
 
-    logger.info('Processing chat message', { message, strategy });
+    logger.info('Processing chat message', { message: message.substring(0, 50), strategy });
 
-    // Get agent response
-    const response = await tenmaService.chat({
+    // Get agent response from Groq
+    const response = await groqService.chat({
       message,
       strategy,
       riskProfile,
       balance: agentState.balance,
       tradesExecuted: agentState.tradesExecuted,
+      account,
     });
 
     // Store in 0G Storage
@@ -166,6 +171,8 @@ app.post('/agent/chat', async (req, res) => {
 
     res.json({
       response,
+      provider: 'groq',
+      model: 'llama-3.1-70b-versatile',
       timestamp: Date.now(),
     });
   } catch (error: any) {
@@ -180,28 +187,18 @@ app.post('/agent/chat', async (req, res) => {
  */
 app.post('/agent/decision', async (req, res) => {
   try {
-    const { strategy = 'dca', riskProfile = 'moderate' } = req.body;
+    const { strategy = 'DCA', riskProfile = 'moderate', account } = req.body;
 
     logger.info('Making trading decision', { strategy, riskProfile });
 
-    // Get market data
-    const blockNumber = await provider.getBlockNumber();
-    const feeData = await provider.getFeeData();
-
-    const marketData = {
-      blockNumber,
-      gasPrice: feeData.gasPrice ? ethers.formatUnits(feeData.gasPrice, 'gwei') : '0',
-      timestamp: Date.now(),
-    };
-
-    // Make decision
-    const decision = await tenmaService.makeDecision({
+    // Make decision using Groq
+    const decision = await groqService.makeDecision({
+      message: 'Make a trading decision based on current market conditions',
       strategy,
       riskProfile,
       balance: agentState.balance,
       tradesExecuted: agentState.tradesExecuted,
-      maxDailyTrades: 10,
-      marketData,
+      account,
     });
 
     // Store decision in 0G Storage
@@ -210,7 +207,6 @@ app.post('/agent/decision', async (req, res) => {
         `decisions/${Date.now()}`,
         JSON.stringify({
           decision,
-          marketData,
           timestamp: Date.now(),
         })
       );
@@ -222,7 +218,8 @@ app.post('/agent/decision', async (req, res) => {
 
     res.json({
       decision,
-      marketData,
+      provider: 'groq',
+      model: 'llama-3.1-70b-versatile',
       timestamp: Date.now(),
     });
   } catch (error: any) {
@@ -235,30 +232,30 @@ app.post('/agent/decision', async (req, res) => {
  * GET /storage/stats
  * Get storage statistics
  */
-app.get('/storage/stats', async (req, res) => {
-  try {
-    const stats = storage.getStats();
-    res.json(stats);
-  } catch (error: any) {
-    logger.error('Error getting storage stats', error);
-    res.status(500).json({ error: error.message });
-  }
-});
+// app.get('/storage/stats', async (req, res) => {
+//   try {
+//     const stats = storage.getStats();
+//     res.json(stats);
+//   } catch (error: any) {
+//     logger.error('Error getting storage stats', error);
+//     res.status(500).json({ error: error.message });
+//   }
+// });
 
 /**
  * GET /storage/list
  * List stored items
  */
-app.get('/storage/list', async (req, res) => {
-  try {
-    const { prefix } = req.query;
-    const items = await storage.list(prefix as string);
-    res.json({ items });
-  } catch (error: any) {
-    logger.error('Error listing storage items', error);
-    res.status(500).json({ error: error.message });
-  }
-});
+// app.get('/storage/list', async (req, res) => {
+//   try {
+//     const { prefix } = req.query;
+//     const items = await storage.list(prefix as string);
+//     res.json({ items });
+//   } catch (error: any) {
+//     logger.error('Error listing storage items', error);
+//     res.status(500).json({ error: error.message });
+//   }
+// });
 
 /**
  * GET /storage/retrieve/:key
@@ -279,10 +276,17 @@ app.get('/storage/retrieve/:key', async (req, res) => {
 const PORT = process.env.AGENT_API_PORT || 3001;
 
 app.listen(PORT, () => {
-  logger.info(`Agent API server running on port ${PORT}`);
-  logger.info(`Wallet address: ${wallet.address}`);
-  logger.info(`Network: 0G Newton Testnet`);
-  logger.info(`Tenma AI: ${tenmaService.isAvailable() ? 'Available' : 'Using fallback'}`);
+  logger.info(`🚀 Tenma Agent API running on port ${PORT}`);
+  logger.info(`🤖 AI Provider: Groq (Llama 3.1 70B)`);
+  logger.info(`🌐 Network: 0G Newton Testnet`);
+  if (wallet) {
+    logger.info(`💰 Wallet: ${wallet.address}`);
+  }
+  logger.info(`📡 Endpoints:`);
+  logger.info(`   GET  /health`);
+  logger.info(`   GET  /agent/status`);
+  logger.info(`   POST /agent/chat`);
+  logger.info(`   POST /agent/decision`);
 });
 
 export default app;

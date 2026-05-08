@@ -45,6 +45,7 @@ const TradingDecisionSchema = z.object({
   reasoning: z.string(),
   confidence: z.number().min(0).max(1),
   urgency: z.enum(["low", "medium", "high"]),
+  timestamp: z.number(),
 });
 
 type TradingDecision = z.infer<typeof TradingDecisionSchema>;
@@ -233,7 +234,10 @@ export class ShieldPoolAgent {
     }
     
     const decision = JSON.parse(content);
-    return TradingDecisionSchema.parse(decision);
+    return {
+      ...TradingDecisionSchema.parse(decision),
+      timestamp: Date.now()
+    };
   }
 
   /**

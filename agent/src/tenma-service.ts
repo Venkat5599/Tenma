@@ -105,7 +105,7 @@ export class TenmaService {
    * Check if service is available
    */
   isAvailable(): boolean {
-    return this.isTenmaAvailable || this.config.fallbackToOpenAI;
+    return this.isTenmaAvailable || (this.config.fallbackToOpenAI ?? false);
   }
 
   /**

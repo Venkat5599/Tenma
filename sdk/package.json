@@ -1,5 +1,5 @@
 {
-  "name": "@tenma/firewall-sdk",
+  "name": "tenma-firewall-sdk",
   "version": "1.0.0",
   "description": "On-Chain Firewall SDK for AI Agents on 0G Network",
   "main": "dist/index.js",
@@ -25,7 +25,8 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/tenma-firewall"
+    "url": "https://github.com/Venkat5599/Tenma.git",
+    "directory": "sdk"
   },
   "dependencies": {
     "ethers": "^6.13.4",
